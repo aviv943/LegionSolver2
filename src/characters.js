@@ -25,7 +25,7 @@ const charactersData = [
         class: 'warrior',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'STR +%',
+        legionEffect: 'STR +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
         description: 'A Warrior class that specializes in critical damage',
         icon: '⚔️'
@@ -36,7 +36,7 @@ const charactersData = [
         class: 'warrior',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'STR +%',
+        legionEffect: 'STR +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
         description: 'A Warrior class with holy elemental attacks and party shields',
         icon: '🛡️'
@@ -69,7 +69,7 @@ const charactersData = [
         class: 'warrior',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Max HP +%',
+        legionEffect: 'Max HP +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
         description: 'A royal guardian who uses a Soul Shield for defense',
         icon: '🔆'
@@ -80,7 +80,7 @@ const charactersData = [
         class: 'warrior',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Ignore Defense +%',
+        legionEffect: 'IED +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
         description: 'A Resistance fighter who uses arm cannons',
         icon: '💥'
@@ -91,7 +91,7 @@ const charactersData = [
         class: 'warrior',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Boss Damage +%',
+        legionEffect: 'Status Resistance +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
         description: 'A former commander of the Black Mage who uses dark force',
         icon: '😈'
@@ -113,7 +113,7 @@ const charactersData = [
         class: 'warrior',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Crit Rate +%',
+        legionEffect: '70% chance to heal MAXHP +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
         description: 'A Pole Arm-wielding hero of old with combo attacks',
         icon: '❄️'
@@ -148,7 +148,7 @@ const charactersData = [
         class: 'mage',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'Max MP +%',
+        legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         description: 'A Mage who specializes in ice and lightning elemental magic',
         icon: '⚡'
@@ -159,7 +159,7 @@ const charactersData = [
         class: 'mage',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'Max MP +%',
+        legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         description: 'A support Mage who uses holy magic to heal and buff allies',
         icon: '✝️'
@@ -170,7 +170,7 @@ const charactersData = [
         class: 'mage',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'Max MP +%',
+        legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         description: 'A close-combat staff-wielding mage of the Resistance',
         icon: '🧙‍♂️'
@@ -181,7 +181,7 @@ const charactersData = [
         class: 'mage',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'INT +%',
+        legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         description: 'A Mage of light and darkness who must maintain equilibrium',
         icon: '☯️'
@@ -192,7 +192,7 @@ const charactersData = [
         class: 'mage',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'Crit Rate +%',
+        legionEffect: '70% chance to heal MAXMP +%',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         description: 'A dragon master who fights alongside Mir',
         icon: '🐉'
@@ -203,7 +203,7 @@ const charactersData = [
         class: 'mage',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'INT +%',
+        legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         description: 'A crystal-wielding Mage from Flora',
         icon: '💎'
@@ -227,7 +227,7 @@ const charactersData = [
         class: 'archer',
         mainStat: 'DEX',
         level: 250,
-        legionEffect: 'Critical Rate +%',
+        legionEffect: 'DEX +',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
         description: 'An Archer who fires multiple arrows with high speed',
         icon: '🏹'
@@ -249,7 +249,7 @@ const charactersData = [
         class: 'archer',
         mainStat: 'DEX',
         level: 250,
-        legionEffect: 'Critical Rate +%',
+        legionEffect: 'DEX +',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
         description: 'An ancient relic hunter who uses cursed magic',
         icon: '⚱️'
@@ -260,7 +260,7 @@ const charactersData = [
         class: 'archer',
         mainStat: 'DEX',
         level: 250,
-        legionEffect: 'DEX +%',
+        legionEffect: 'DEX +',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
         description: 'An Archer who uses the power of wind',
         icon: '🍃'
@@ -282,7 +282,7 @@ const charactersData = [
         class: 'archer',
         mainStat: 'DEX',
         level: 250,
-        legionEffect: 'Skill Cooldown -% Reduction',
+        legionEffect: 'Skill Cooldown -%',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
         description: 'An elven queen who dual-wields Bowguns with combo skills',
         icon: '🧝‍♀️'
@@ -295,7 +295,7 @@ const charactersData = [
         class: 'thief',
         mainStat: 'LUK',
         level: 250,
-        legionEffect: 'Critical Damage +%',
+        legionEffect: 'Critical Rate +%',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
         description: 'A Thief who throws stars from the shadows',
         icon: '🌑'
@@ -306,7 +306,7 @@ const charactersData = [
         class: 'thief',
         mainStat: 'LUK',
         level: 250,
-        legionEffect: 'Critical Damage +%',
+        legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
         description: 'A melee Thief who uses daggers and meso attacks',
         icon: '🗡️'
@@ -317,7 +317,7 @@ const charactersData = [
         class: 'thief',
         mainStat: 'LUK',
         level: 250,
-        legionEffect: 'Critical Damage +%',
+        legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
         description: 'A Thief who dual-wields katars with fast attacks',
         icon: '⚔️'
@@ -328,7 +328,7 @@ const charactersData = [
         class: 'thief',
         mainStat: 'LUK',
         level: 250,
-        legionEffect: 'LUK +%',
+        legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
         description: 'A bat-controlling throwing star specialist',
         icon: '🦇'
@@ -350,7 +350,7 @@ const charactersData = [
         class: 'thief',
         mainStat: 'LUK',
         level: 250,
-        legionEffect: 'LUK +%',
+        legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
         description: 'A chain-wielding Nova who uses various weapons in combo',
         icon: '⛓️'
@@ -361,7 +361,7 @@ const charactersData = [
         class: 'thief',
         mainStat: 'LUK',
         level: 250,
-        legionEffect: 'Ignore Defense +%',
+        legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
         description: 'A trickster sage who uses illusions and talismans',
         icon: '🦊'
@@ -372,7 +372,7 @@ const charactersData = [
         class: 'thief',
         mainStat: 'LUK',
         level: 250,
-        legionEffect: 'LUK +%',
+        legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
         description: 'A nimble thief who specializes in swift shadow attacks',
         icon: '🥷'
@@ -385,7 +385,7 @@ const charactersData = [
         class: 'pirate',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'STR +%',
+        legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         description: 'A pirate who uses knuckles with energy-charging abilities',
         icon: '👊'
@@ -403,11 +403,11 @@ const charactersData = [
     },
     {
         id: 33,
-        name: 'Cannon Shooter',
+        name: 'Cannoneer',
         class: 'pirate',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'STR +%',
+        legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         description: 'A pirate who rides and fires from a giant cannon',
         icon: '💣'
@@ -418,7 +418,7 @@ const charactersData = [
         class: 'pirate',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Critical Rate +%',
+        legionEffect: 'Critical Damage +%',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         description: 'A forgotten hero who uses spirit fox powers',
         icon: '👻'
@@ -429,7 +429,7 @@ const charactersData = [
         class: 'pirate',
         mainStat: 'DEX',
         level: 250,
-        legionEffect: 'DEX +%',
+        legionEffect: 'DEX +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         description: 'A Nova girl who transforms into a magical girl',
         icon: '💕'
@@ -440,7 +440,7 @@ const charactersData = [
         class: 'pirate',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'STR +%',
+        legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         description: 'A lightning-wielding pirate with quick combo attacks',
         icon: '⚡'
@@ -462,7 +462,7 @@ const charactersData = [
         class: 'pirate',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Ignore Defense +%',
+        legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         description: 'A Specter from Flora who transforms between forms',
         icon: '🐙'
@@ -475,7 +475,7 @@ const charactersData = [
         class: 'special',
         mainStat: 'LUK/DEX/STR',
         level: 250,
-        legionEffect: 'Stat +%',
+        legionEffect: 'STR,DEX,LUK +',
         pieceIndex: 14, // Refers to the piece type (lvl 250 Xenon)
         description: 'A hybrid android who uses all three stats',
         icon: '🤖'
@@ -486,7 +486,7 @@ const charactersData = [
         class: 'special',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Experience Obtained +%',
+        legionEffect: 'EXP +%',
         pieceIndex: 9, // Zero uses Warrior pieces
         description: 'Dual characters Alpha and Beta who share a body',
         icon: '⚔️'
@@ -497,7 +497,7 @@ const charactersData = [
         class: 'special',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'INT +%',
+        legionEffect: 'INT +',
         pieceIndex: 12, // Kinesis uses Mage pieces
         description: 'A psychic from another world who uses telekinesis',
         icon: '🧠'
@@ -508,7 +508,7 @@ const charactersData = [
         class: 'special',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'STR +%',
+        legionEffect: 'STR +',
         pieceIndex: 9, // Adele uses Warrior pieces
         description: 'A master of Aether who uses floating swords',
         icon: '⚔️'
