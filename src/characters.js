@@ -483,7 +483,7 @@ const charactersData = [
     {
         id: 40,
         name: 'Zero',
-        class: 'special',
+        class: 'warrior',
         mainStat: 'STR',
         level: 250,
         legionEffect: 'EXP +%',
@@ -494,7 +494,7 @@ const charactersData = [
     {
         id: 41,
         name: 'Kinesis',
-        class: 'special',
+        class: 'mage',
         mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
@@ -505,7 +505,7 @@ const charactersData = [
     {
         id: 42,
         name: 'Adele',
-        class: 'special',
+        class: 'warrior',
         mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
