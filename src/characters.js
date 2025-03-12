@@ -453,16 +453,12 @@ window.updatePieceAmounts = updatePieceAmounts;
 
 // Directly attempt to initialize when this script loads
 (function immediateInit() {
-    console.log('DEBUG: Attempting immediate initialization');
     // Check if document is already loaded
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        console.log('DEBUG: Document ready, will initialize shortly');
         setTimeout(initCharacterSelector, 300);
     } else {
         // Wait for document to be ready
-        console.log('DEBUG: Document not ready, adding event listener');
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DEBUG: DOMContentLoaded from characters.js');
             setTimeout(initCharacterSelector, 300);
         });
     }
@@ -470,7 +466,6 @@ window.updatePieceAmounts = updatePieceAmounts;
 
 // Initialize the character selector
 function initCharacterSelector() {
-    console.log('DEBUG: initCharacterSelector start');
     console.log('Initializing character selector');
     
     // Wait a short time to ensure DOM is fully loaded
@@ -484,7 +479,6 @@ function initCharacterSelector() {
         
         // Replace category buttons with preset buttons
         const filterContainer = document.querySelector('.filterContainer');
-        console.log('DEBUG: filterContainer:', filterContainer);
         
         if (filterContainer) {
             // Clear any existing content
@@ -540,7 +534,6 @@ function initCharacterSelector() {
         }
         
         // Create character cards
-        console.log('DEBUG: About to render character cards');
         renderCharacterCards();
         
         // Create hidden form elements for compatibility with the original solver
@@ -570,8 +563,6 @@ function initCharacterSelector() {
         setTimeout(() => {
             loadSavedState();
         }, 100);
-        
-        console.log('DEBUG: initCharacterSelector completed');
     }, 200); // Small delay to ensure DOM is ready
 }
 
@@ -745,9 +736,6 @@ function saveBoardStateForPreset() {
 
 // Render all character cards
 function renderCharacterCards() {
-    console.log('DEBUG: renderCharacterCards called');
-    console.log('DEBUG: characterData length:', charactersData.length);
-    
     if (!charactersData || charactersData.length === 0) {
         console.error('Character data is missing or empty');
         return;
@@ -776,9 +764,6 @@ function renderCharacterCards() {
 
 // Helper function to render characters to a container element
 function renderCharactersToElement(container) {
-    // Log the element to make sure it's what we expect
-    console.log('DEBUG: container element:', container);
-    
     container.innerHTML = '';
     
     // Create a container with class sections
@@ -908,7 +893,7 @@ function renderCharactersToElement(container) {
     
     // Add the container to the selector
     container.appendChild(charactersContainer);
-    console.log('DEBUG: Characters rendered by class sections');
+    console.log('Characters rendered by class sections');
 }
 
 // Filter characters by category - no longer needed, but keep it for compatibility
@@ -929,61 +914,64 @@ function selectCharacter(character) {
     }
     
     // Map levels to piece indices based on character class
+    // NOTE: These are now the actual piece IDs, not array indices
     const levelToPieceIndex = {
         'warrior': {
-            60: 0,  // Level 60 - Basic shape
-            100: 1, // Level 100 - Basic shape
-            140: 2, // Level 140 - Warrior shape
-            200: 4, // Level 200 - Warrior shape
-            250: 9  // Level 250 - Warrior shape
+            60: 1,  // Level 60 - Basic shape (piece ID 1)
+            100: 2, // Level 100 - Basic shape (piece ID 2)
+            140: 3, // Level 140 - Warrior shape (piece ID 3)
+            200: 5, // Level 200 - Warrior shape (piece ID 5)
+            250: 10 // Level 250 - Warrior shape (piece ID 10)
         },
         'mage': {
-            60: 0,  
-            100: 1,
-            140: 3, // Level 140 - Mage shape
-            200: 7, // Level 200 - Mage shape  
-            250: 12 // Level 250 - Mage shape
+            60: 1,  // Level 60 - Basic shape (piece ID 1)
+            100: 2, // Level 100 - Basic shape (piece ID 2) 
+            140: 4, // Level 140 - Mage shape (piece ID 4)
+            200: 8, // Level 200 - Mage shape (piece ID 8)
+            250: 13 // Level 250 - Mage shape (piece ID 13)
         },
         'archer': {
-            60: 0,
-            100: 1,
-            140: 3, // Level 140 - Archer shape (same as mage/thief)
-            200: 5, // Level 200 - Archer shape
-            250: 10 // Level 250 - Archer shape
+            60: 1,  // Level 60 - Basic shape (piece ID 1)
+            100: 2, // Level 100 - Basic shape (piece ID 2)
+            140: 4, // Level 140 - Archer shape (piece ID 4)
+            200: 6, // Level 200 - Archer shape (piece ID 6)
+            250: 11 // Level 250 - Archer shape (piece ID 11)
         },
         'thief': {
-            60: 0,
-            100: 1, 
-            140: 3, // Level 140 - Thief shape (same as mage/archer)
-            200: 6, // Level 200 - Thief shape
-            250: 11 // Level 250 - Thief shape
+            60: 1,  // Level 60 - Basic shape (piece ID 1)
+            100: 2, // Level 100 - Basic shape (piece ID 2)
+            140: 4, // Level 140 - Thief shape (piece ID 4)
+            200: 7, // Level 200 - Thief shape (piece ID 7)
+            250: 12 // Level 250 - Thief shape (piece ID 12)
         },
         'pirate': {
-            60: 0,
-            100: 1,
-            140: 2, // Level 140 - Pirate shape (same as warrior)
-            200: 8, // Level 200 - Pirate shape
-            250: 13 // Level 250 - Pirate shape
+            60: 1,  // Level 60 - Basic shape (piece ID 1)
+            100: 2, // Level 100 - Basic shape (piece ID 2)
+            140: 3, // Level 140 - Pirate shape (piece ID 3)
+            200: 9, // Level 200 - Pirate shape (piece ID 9)
+            250: 14 // Level 250 - Pirate shape (piece ID 14)
         },
         'special': {
-            // Special classes use their specific pieceIndex from the character data
-            // But we'll still allow level selection for UI consistency
-            60: character.pieceIndex,
-            100: character.pieceIndex,
-            140: character.pieceIndex,
-            200: character.pieceIndex,
-            250: character.pieceIndex
+            // Special classes use Xenon piece for level 250
+            60: 1,  // Default to basic shape (piece ID 1)
+            100: 2, // Default to basic shape (piece ID 2)
+            140: 4, // Default to horizontal shape (piece ID 4)
+            200: 8, // Default to mage shape (piece ID 8)
+            250: 15 // Default to Xenon shape (piece ID 15)
         }
     };
     
+    // Make levelToPieceIndex available globally for verification
+    window.levelToPieceIndex = levelToPieceIndex;
+    
     // Create level selection radio buttons
-    const levelOptions = [60, 100, 140, 200, 250].map(level => {
-        const pieceIndex = levelToPieceIndex[character.class][level] || 0;
-        const checked = level === 250 ? 'checked' : ''; // Default to level 250
+    const levelControls = [60, 100, 140, 200, 250].map(level => {
+        const pieceId = levelToPieceIndex[character.class][level] || 1;
+        
         return `
-            <label class="level-option">
-                <input type="radio" name="characterLevel" value="${level}" data-piece-index="${pieceIndex}" ${checked}>
-                <span>${level}</span>
+            <label class="level-radio">
+                <input type="radio" name="level" value="${level}" data-piece-index="${pieceId}" ${level === 250 ? 'checked' : ''}>
+                <span>Lvl ${level}</span>
             </label>
         `;
     }).join('');
@@ -997,7 +985,7 @@ function selectCharacter(character) {
             <div class="level-selection">
                 <p><strong>Select Character Level:</strong></p>
                 <div class="level-options">
-                    ${levelOptions}
+                    ${levelControls}
                 </div>
             </div>
             
@@ -1010,7 +998,7 @@ function selectCharacter(character) {
     if (addBtn) {
         addBtn.onclick = function() {
             // Get the selected level and piece index
-            const selectedLevel = document.querySelector('input[name="characterLevel"]:checked');
+            const selectedLevel = document.querySelector('input[name="level"]:checked');
             const level = selectedLevel ? parseInt(selectedLevel.value) : 250;
             const pieceIndex = selectedLevel ? parseInt(selectedLevel.dataset.pieceIndex) : character.pieceIndex;
             
@@ -1073,34 +1061,51 @@ function addCharacterToPieceSelection(character) {
         return;
     }
     
-    // Get the appropriate CSS class based on pieceIndex
-    const getPieceColorClass = (pieceIndex) => {
+    // Get the appropriate CSS class based on pieceIndex and character class
+    const getPieceColorClass = (pieceIndex, characterClass) => {
+        // Base color class based on character class
+        let classColorClass = '';
+        
+        switch(characterClass) {
+            case 'warrior': classColorClass = 'warrior-color'; break;
+            case 'mage': classColorClass = 'mage-color'; break;
+            case 'archer': classColorClass = 'archer-color'; break;
+            case 'thief': classColorClass = 'thief-color'; break;
+            case 'pirate': classColorClass = 'pirate-color'; break;
+            case 'special': classColorClass = 'special-color'; break;
+            default: classColorClass = ''; break;
+        }
+        
+        // Shape class based on piece index
+        let shapeClass = '';
         switch(pieceIndex) {
-            case 1: return 'piece-lvl60';
-            case 2: return 'piece-lvl100';
-            case 3: return 'piece-lvl140-warrior-pirate';
-            case 4: return 'piece-lvl140-mage-thief-archer';
-            case 5: return 'piece-lvl200-warrior';
-            case 6: return 'piece-lvl200-archer';
-            case 7: return 'piece-lvl200-thief-lab';
-            case 8: return 'piece-lvl200-mage';
-            case 9: return 'piece-lvl200-pirate';
-            case 10: return 'piece-lvl250-warrior';
-            case 11: return 'piece-lvl250-archer';
-            case 12: return 'piece-lvl250-thief';
-            case 13: return 'piece-lvl250-mage';
-            case 14: return 'piece-lvl250-pirate';
-            case 15: return 'piece-lvl250-xenon';
+            case 1: shapeClass = 'piece-lvl60'; break;
+            case 2: shapeClass = 'piece-lvl100'; break;
+            case 3: shapeClass = 'piece-lvl140-warrior-pirate'; break;
+            case 4: shapeClass = 'piece-lvl140-mage-thief-archer'; break;
+            case 5: shapeClass = 'piece-lvl200-warrior'; break;
+            case 6: shapeClass = 'piece-lvl200-archer'; break;
+            case 7: shapeClass = 'piece-lvl200-thief-lab'; break;
+            case 8: shapeClass = 'piece-lvl200-mage'; break;
+            case 9: shapeClass = 'piece-lvl250-warrior'; break;
+            case 10: shapeClass = 'piece-lvl250-archer'; break;
+            case 11: shapeClass = 'piece-lvl250-thief'; break;
+            case 12: shapeClass = 'piece-lvl250-mage'; break;
+            case 13: shapeClass = 'piece-lvl250-pirate'; break;
+            case 14: shapeClass = 'piece-lvl250-xenon'; break;
+            case 15:
             case 16:
             case 17:
-            case 18: return 'piece-lab-enhanced';
-            default: return '';
+            case 18: shapeClass = 'piece-lab-enhanced'; break;
+            default: shapeClass = ''; break;
         }
+        
+        return `${shapeClass} ${classColorClass}`;
     };
 
     // Create piece element
     const pieceElement = document.createElement('div');
-    pieceElement.className = `selectedPiece ${getPieceColorClass(character.pieceIndex)}`;
+    pieceElement.className = `selectedPiece ${getPieceColorClass(character.pieceIndex, character.class)}`;
     pieceElement.dataset.id = character.id;
     pieceElement.dataset.uniqueId = uniqueId;
     pieceElement.dataset.pieceIndex = character.pieceIndex;
@@ -1450,33 +1455,50 @@ function addCharacterWithoutSaving(character) {
     }
     
     // Get the appropriate CSS class based on pieceIndex
-    const getPieceColorClass = (pieceIndex) => {
+    const getPieceColorClass = (pieceIndex, characterClass) => {
+        // Base color class based on character class
+        let classColorClass = '';
+        
+        switch(characterClass) {
+            case 'warrior': classColorClass = 'warrior-color'; break;
+            case 'mage': classColorClass = 'mage-color'; break;
+            case 'archer': classColorClass = 'archer-color'; break;
+            case 'thief': classColorClass = 'thief-color'; break;
+            case 'pirate': classColorClass = 'pirate-color'; break;
+            case 'special': classColorClass = 'special-color'; break;
+            default: classColorClass = ''; break;
+        }
+        
+        // Shape class based on piece index
+        let shapeClass = '';
         switch(pieceIndex) {
-            case 1: return 'piece-lvl60';
-            case 2: return 'piece-lvl100';
-            case 3: return 'piece-lvl140-warrior-pirate';
-            case 4: return 'piece-lvl140-mage-thief-archer';
-            case 5: return 'piece-lvl200-warrior';
-            case 6: return 'piece-lvl200-archer';
-            case 7: return 'piece-lvl200-thief-lab';
-            case 8: return 'piece-lvl200-mage';
-            case 9: return 'piece-lvl200-pirate';
-            case 10: return 'piece-lvl250-warrior';
-            case 11: return 'piece-lvl250-archer';
-            case 12: return 'piece-lvl250-thief';
-            case 13: return 'piece-lvl250-mage';
-            case 14: return 'piece-lvl250-pirate';
-            case 15: return 'piece-lvl250-xenon';
+            case 1: shapeClass = 'piece-lvl60'; break;
+            case 2: shapeClass = 'piece-lvl100'; break;
+            case 3: shapeClass = 'piece-lvl140-warrior-pirate'; break;
+            case 4: shapeClass = 'piece-lvl140-mage-thief-archer'; break;
+            case 5: shapeClass = 'piece-lvl200-warrior'; break;
+            case 6: shapeClass = 'piece-lvl200-archer'; break;
+            case 7: shapeClass = 'piece-lvl200-thief-lab'; break;
+            case 8: shapeClass = 'piece-lvl200-mage'; break;
+            case 9: shapeClass = 'piece-lvl250-warrior'; break;
+            case 10: shapeClass = 'piece-lvl250-archer'; break;
+            case 11: shapeClass = 'piece-lvl250-thief'; break;
+            case 12: shapeClass = 'piece-lvl250-mage'; break;
+            case 13: shapeClass = 'piece-lvl250-pirate'; break;
+            case 14: shapeClass = 'piece-lvl250-xenon'; break;
+            case 15:
             case 16:
             case 17:
-            case 18: return 'piece-lab-enhanced';
-            default: return '';
+            case 18: shapeClass = 'piece-lab-enhanced'; break;
+            default: shapeClass = ''; break;
         }
+        
+        return `${shapeClass} ${classColorClass}`;
     };
 
     // Create piece element
     const pieceElement = document.createElement('div');
-    pieceElement.className = `selectedPiece ${getPieceColorClass(character.pieceIndex)}`;
+    pieceElement.className = `selectedPiece ${getPieceColorClass(character.pieceIndex, character.class)}`;
     pieceElement.dataset.id = character.id;
     pieceElement.dataset.uniqueId = uniqueId;
     pieceElement.dataset.pieceIndex = character.pieceIndex;
@@ -1636,16 +1658,15 @@ function getPieceDescription(index) {
         case 6: return "Level 200 Archer";
         case 7: return "Level 200 Thief/Lab";
         case 8: return "Level 200 Mage";
-        case 9: return "Level 200 Pirate";
-        case 10: return "Level 250 Warrior";
-        case 11: return "Level 250 Archer";
-        case 12: return "Level 250 Thief";
-        case 13: return "Level 250 Mage";
-        case 14: return "Level 250 Pirate";
-        case 15: return "Level 250 Xenon";
-        case 16: return "Level 200 Enhanced Lab";
-        case 17: return "Level 250 Enhanced Lab";
-        case 18: return "Level 250 Lab";
+        case 9: return "Level 250 Warrior";
+        case 10: return "Level 250 Archer";
+        case 11: return "Level 250 Thief";
+        case 12: return "Level 250 Mage";
+        case 13: return "Level 250 Pirate";
+        case 14: return "Level 250 Xenon";
+        case 15: return "Level 200 Enhanced Lab";
+        case 16: return "Level 250 Enhanced Lab";
+        case 17: return "Level 250 Lab";
         default: return `Unknown piece type (${index})`;
     }
 }

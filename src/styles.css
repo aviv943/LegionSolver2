@@ -1080,3 +1080,30 @@ body.dark-mode #classCategories.filterContainer {
 body.dark-mode .character-count {
     color: rgba(255, 255, 255, 0.7);
 }
+
+/* Character class color styles for selected pieces */
+.selectedPiece.warrior-color {
+    border-left: 4px solid #800000 !important; /* Burgundy red for warriors */
+}
+
+.selectedPiece.mage-color {
+    border-left: 4px solid #1e3a8a !important; /* Deep blue for mages/wizards */
+}
+
+.selectedPiece.thief-color {
+    border-left: 4px solid #4b0082 !important; /* Purple for thieves */
+}
+
+.selectedPiece.archer-color {
+    border-left: 4px solid #006400 !important; /* Dark green for archers */
+}
+
+.selectedPiece.pirate-color {
+    border-left: 4px solid #5f9ea0 !important; /* Cadet blue for pirates */
+}
+
+.selectedPiece.special-color {
+    border-left: 4px solid #9370db !important; /* Medium purple for special classes */
+}
+
+/* Add the following classes for piece colors */

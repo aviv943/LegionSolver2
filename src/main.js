@@ -269,22 +269,22 @@ function verifyPieceAssignments(pieceCountByIndex) {
   document.querySelectorAll('.selectedPiece').forEach(piece => {
     const characterName = piece.querySelector('.characterName')?.textContent || 'Unknown';
     const characterClass = piece.getAttribute('data-character-class') || piece.dataset.characterClass || 'unknown';
-    const characterLevel = piece.querySelector('.characterLevel')?.textContent?.replace('Level ', '') || '250';
+    const characterLevel = piece.querySelector('.characterLevel')?.textContent?.replace('Lvl ', '') || '250';
     const level = parseInt(characterLevel);
     
-    // Get the expected piece index from the mapping
-    const expectedPieceIndex = window.levelToPieceIndex[characterClass] ? 
-      window.levelToPieceIndex[characterClass][level] + 1 : null;
+    // Get the expected piece ID directly from the mapping
+    const expectedPieceId = window.levelToPieceIndex[characterClass] ? 
+      window.levelToPieceIndex[characterClass][level] : null;
     
     // Get the actual piece index used
     const actualPieceIndex = parseInt(piece.getAttribute('data-piece-index') || piece.dataset.pieceIndex) || 0;
     
-    if (expectedPieceIndex !== actualPieceIndex) {
+    if (expectedPieceId !== actualPieceIndex) {
       console.warn(`Piece mismatch for ${characterName} (${characterClass} lvl ${level}): 
-        Expected: ${expectedPieceIndex}, Actual: ${actualPieceIndex}`);
+        Expected: ${expectedPieceId}, Actual: ${actualPieceIndex}`);
     } else {
       console.log(`Piece verified for ${characterName} (${characterClass} lvl ${level}): 
-        Using piece index ${actualPieceIndex}`);
+        Using piece ID ${actualPieceIndex}`);
     }
   });
 }
@@ -295,17 +295,13 @@ window.monitorBoardState = monitorBoardState;
 
 // Initialize the character selector after the page loads
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('DEBUG: DOMContentLoaded event fired');
+  console.log('DOM content loaded, initializing application');
   
   // Verify DOM elements exist before initialization
   const characterSelector = document.getElementById('characterSelector');
   const filterContainer = document.querySelector('.filterContainer');
-  console.log('DEBUG: DOM elements check - characterSelector:', !!characterSelector, 'filterContainer:', !!filterContainer);
-  
-  console.log('DOM content loaded, initializing application');
   
   // Initialize the character selector with a slight delay to ensure DOM is ready
-  console.log('DEBUG: About to call initCharacterSelector');
   setTimeout(() => {
     initCharacterSelector();
   }, 100);
@@ -330,12 +326,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Backup initialization if DOMContentLoaded doesn't fire for some reason
 window.addEventListener('load', function() {
-  console.log('DEBUG: Window load event fired');
-  
   // Check if characterSelector has content
   const characterSelector = document.getElementById('characterSelector');
   if (characterSelector && characterSelector.children.length === 0) {
-    console.log('DEBUG: Character selector is empty, reinitializing');
+    console.log('Character selector is empty, reinitializing');
     initCharacterSelector();
   }
 });
+
+// Debug helper to verify piece mapping
+window.debugPieceMapping = function(character) {
+    if (!window.levelToPieceIndex || !window.pieces) {
+        console.log("levelToPieceIndex or pieces not available for debugging");
+        return;
+    }
+
+    const characterElement = character;
+    const characterName = characterElement.querySelector('.name').textContent;
+    
+    // Extract class and level
+    const characterClass = characterElement.getAttribute('data-class');
+    const characterLevel = characterElement.getAttribute('data-level');
+    const level = parseInt(characterLevel.replace('Lvl ', ''));
+    
+    // Get the actual piece index used
+    const actualPieceIndex = parseInt(characterElement.getAttribute('data-piece-index'));
+    
+    // Get the expected piece ID from the levelToPieceIndex mapping
+    const expectedPieceId = window.levelToPieceIndex[characterClass][level] || null;
+    
+    console.log(`${characterName} (${characterClass} ${characterLevel}):`);
+    console.log(`- Expected piece ID: ${expectedPieceId}`);
+    console.log(`- Actual piece index: ${actualPieceIndex}`);
+    
+    if (expectedPieceId !== actualPieceIndex) {
+        console.warn(`⚠️ MISMATCH: Expected piece ID ${expectedPieceId}, but got ${actualPieceIndex}`);
+    }
+    
+    // Show the expected piece shape
+    if (expectedPieceId && window.pieces && expectedPieceId - 1 >= 0 && expectedPieceId - 1 < window.pieces.length) {
+        const expectedPiece = window.pieces[expectedPieceId - 1];
+        if (expectedPiece) {
+            console.log("Expected shape:");
+            window.visualizePieceShape(expectedPiece.cells);
+        }
+    }
+};
+
+// Function to visualize a piece shape in the console
+window.visualizePieceShape = function(cells) {
+    const shapeText = cells.map(row => 
+        row.map(cell => cell === 0 ? '□' : (cell === 1 ? '■' : '▣')).join(' ')
+    ).join('\n');
+    console.log(shapeText);
+};

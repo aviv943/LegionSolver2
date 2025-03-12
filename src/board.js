@@ -752,11 +752,6 @@ async function runSolver() {
         window.updatePiecesForSolver();
     }
     
-    // DEBUG: Print board and pieces information
-    console.log("========== SOLVER DEBUG ==========");
-    console.log("Board filled spaces:", boardFilled);
-    console.log("Current pieces total:", currentPieces);
-    
     // Check if any pieces have amounts set
     let hasPieces = false;
     pieces.forEach((piece, index) => {

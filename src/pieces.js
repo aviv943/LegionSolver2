@@ -16,88 +16,88 @@ const STORAGE_KEYS = {
 
 // Fixed and verified piece shapes for all character classes and levels
 const defaultPieces = [
-    // Lvl 60 - Single cell (all classes)
+    // Lvl 60 - All classes (index 0)
     [
         [2]
     ],
 
-    // Lvl 100 - 1x2 rectangle (all classes)
+    // Lvl 100 - All classes (index 1)
     [
         [2, 2]
     ],
 
-    // Lvl 140 Warrior/Pirate - L shape
+    // Lvl 140 Warrior/Pirate (index 2)
     [
         [1, 0],
         [2, 1]
     ],
 
-    // Lvl 140 Mage/Thief/Archer - Horizontal 3 cells
+    // Lvl 140 Mage/Thief/Archer (index 3)
     [
         [1, 2, 1]
     ],
 
-    // Lvl 200 Warrior - 2x2 square
+    // Lvl 200 Warrior (index 4)
     [
         [2, 2],
         [2, 2]
     ],
 
-    // Lvl 200 Archer - Horizontal 4 cells with pattern
+    // Lvl 200 Archer (index 5)
     [
         [1, 2, 2, 1]
     ],
 
-    // Lvl 200 Thief/Lab - T shape
+    // Lvl 200 Thief/Lab (index 6)
     [
         [1, 0, 0],
         [1, 2, 1]
     ],
 
-    // Lvl 200 Mage - Plus shape
+    // Lvl 200 Mage (index 7)
     [
         [0, 1, 0],
         [1, 2, 1]
     ],
 
-    // Lvl 200 Pirate - Z shape
+    // Lvl 200 Pirate (index 8)
     [
         [1, 2, 0],
         [0, 2, 1]
     ],
 
-    // Lvl 250 Warrior - Corner shape
+    // Lvl 250 Warrior (index 9)
     [
         [1, 1, 2],
         [0, 1, 1]
     ],
 
-    // Lvl 250 Archer - Horizontal 5 cells
+    // Lvl 250 Archer (index 10)
     [
         [1, 1, 2, 1, 1]
     ],
 
-    // Lvl 250 Thief - H shape
+    // Lvl 250 Thief (index 11)
     [
-        [0, 0, 1],
+        [1, 0, 1],
         [1, 2, 1],
-        [0, 0, 1]
+        [1, 0, 1]
     ],
 
-    // Lvl 250 Mage - Cross shape
+    // Lvl 250 Mage (index 12)
     [
         [0, 1, 0],
         [1, 2, 1],
         [0, 1, 0]
     ],
 
-    // Lvl 250 Pirate - 7 shape
+    // Lvl 250 Pirate (index 13)
     [
         [1, 2, 0, 0],
         [0, 1, 1, 1]
     ],
 
-    // Lvl 250 Xenon - Triangle shape
+    // Lvl 250 Xenon (index 14)
     [
         [1, 1, 0],
         [0, 2, 0],
@@ -127,6 +127,8 @@ const gmsPieces = [
 
 // Create pieces from the defined shapes
 const pieces = []
+// Reset the Piece ID counter to ensure pieces get IDs starting from 1
+Piece.curId = 1;
 for (let piece of defaultPieces){
     pieces.push(Piece.createPiece(piece, 0));
 }
@@ -342,5 +344,23 @@ function clearPieces() {
 window.pieces = pieces;
 window.currentPieces = currentPieces;
 window.currentUseCaracterCount = currentUseCaracterCount;
+
+// Debug function to check piece IDs
+window.debugPieceIDs = function() {
+    console.log("===== PIECE ID DEBUG =====");
+    console.log("Total pieces:", pieces.length);
+    
+    pieces.forEach((piece, index) => {
+        console.log(`Piece at index ${index}:`);
+        console.log(`  ID: ${piece.id}`);
+        console.log(`  Cell Count: ${piece.cellCount}`);
+        const shapeVisualization = piece.shape.map(row => 
+            row.map(cell => cell === 0 ? '□' : (cell === 1 ? '■' : '▣')).join('')
+        ).join('\n');
+        console.log(`  Shape:\n${shapeVisualization}`);
+    });
+    
+    console.log("===== END PIECE ID DEBUG =====");
+};
 
 export { pieceColours, pieces, updateCurrentPieces, clearPieces };
