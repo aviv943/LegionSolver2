@@ -66,6 +66,7 @@ class LegionSolver {
         this.pieces.sort((a, b) => b.amount * b.cellCount - a.amount * a.cellCount);
         this.pieces.push(new Piece([[]], 0, -1));
         this.restrictedSpots.sort((a, b) => b.spotsFilled - a.spotsFilled);
+        this.time = new Date().getTime();
         this.success = await this.solveInternal();
         return this.success;
     }
@@ -77,10 +78,16 @@ class LegionSolver {
         let point;
         let position = 0;
 
+        // Get first empty spot
+        while (position < this.emptySpots.length && this.board[this.emptySpots[position].y][this.emptySpots[position].x] != 0) {
+            position++;
+        }
+
         while (this.pieces[0].amount > 0 || !this.valid) {
             if (this.shouldStop) {
                 return;
             }
+            
             if (this.valid && this.restrictedSpots.length != 0 && this.pieces[this.restrictedPieceNumber].amount && this.directionFree != 5 && !this.firstAlgorithm) {
                 if (this.restrictedPieceNumber != this.pieceLength) {
                     point = this.restrictedSpots[0];
@@ -105,14 +112,15 @@ class LegionSolver {
                     while (position < this.emptySpots.length && this.board[this.emptySpots[position].y][this.emptySpots[position].x] != 0) {
                         position++;
                     }
-                } else {
-
                 }
+                
                 if (position == this.emptySpots.length) {
                     return true;
                 }
+                
                 point = this.emptySpots[position];
                 piece = this.pieces[this.pieceNumber].transformations[this.transformationNumber];
+                
                 if (this.isPlaceable(point, piece)) {
                     let filler = [];
                     for (let i = 0; i < this.longSpaces.length; i++) {
@@ -160,14 +168,15 @@ class LegionSolver {
                 } else {
                     this.changeIndex(false);
                 }
-
             }
 
             this.iterations++;
             if (this.iterations % batchSize == 0) {
                 this.onBoardUpdated();
                 await new Promise(resolve => setTimeout(resolve, 0));
-                await this.pausePromise;
+                if (this.pausePromise) {
+                    await this.pausePromise;
+                }
             }
         }
 
@@ -398,6 +407,29 @@ class LegionSolver {
 
     stop() {
         this.shouldStop = true;
+    }
+
+    // Verify that a piece has all its possible transformations (rotations and reflections)
+    verifyPieceTransformations(pieceIndex) {
+        if (pieceIndex < 0 || pieceIndex >= this.pieces.length) {
+            return false;
+        }
+
+        const piece = this.pieces[pieceIndex];
+        
+        // Force calculation of transformations if not already done
+        const transformations = piece.transformations;
+        
+        // Log the transformations for debugging
+        console.log(`Piece #${pieceIndex+1} has ${transformations.length} transformations`);
+        
+        for (let i = 0; i < transformations.length; i++) {
+            // Force calculation of pointShape for each transformation
+            const pointShape = transformations[i].pointShape;
+            console.log(`  Transformation #${i+1}: ${pointShape.length} points`);
+        }
+        
+        return transformations.length > 0;
     }
 }
 

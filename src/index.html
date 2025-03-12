@@ -4,6 +4,8 @@
     <script src="<%= htmlWebpackPlugin.files.js[i] %>" async></script>
   <% } %>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legion Solver v2</title>
 </head>
 <body id="body">
   <div id="header">
@@ -14,14 +16,11 @@
       <% } %>
     </select>
   </div>
-  <h1 id="title">Legion Solver</h1>
+  <h1 id="title">Legion Solver v2</h1>
   <div id="subtitle">Made by: Xenogent of Bera</div>
-  <div id="subtitle">Donate paypal: wellifitisntmoehoward@gmail.com</div>
+  <div id="subtitle">Upgraded to Legion Solver v2 by: Aviv943</div>
+  
   <div id="legionWrapper" class="centerMiddleChild">
-    <div id="pieceForm">
-      <form></form>
-      <button id="clearPieces">Clear Pieces</button>
-    </div>
     <div id="legion">
       <table id="legionBoard">
         <tbody></tbody>
@@ -62,13 +61,16 @@
             </div>
           </div>
         </div>
+        
+        <!-- Debug Output -->
+        <div id="debugOutput" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9; white-space: pre; font-family: monospace; max-height: 300px; overflow: auto; display: none;"></div>
       </div>
     </div>
     <div id="instructions">
       <h2>Instructions:</h2>
       <div id="paragraph">
         <p>1. Click the grid spaces you want to be filled, the region click will help you fill it in faster.</p>
-        <p>2. Input the amount of each shape you want to be filled in the board.</p>
+        <p>2. Select the characters you want to place on the board from the character selector below.</p>
         <p>3. The space that the pieces take up should equal the amount of grid spaces you filled,
           although the program will still try to run otherwise.</p>
         <p>4. When you press Start the program will try to fill the board spaces with the pieces you've chosen,
@@ -77,5 +79,83 @@
       </div>
     </div>
   </div>
+
+  <!-- New Character Selection Panel -->
+  <div id="characterSelectionPanel">
+    <h2>Select Characters</h2>
+    <div id="classCategories" class="filterContainer">
+      <!-- Preset buttons will be added here dynamically by the JavaScript -->
+    </div>
+    <div id="characterSelector">
+      <!-- Characters will be inserted here dynamically -->
+    </div>
+    <div id="characterInfo">
+      <div id="selectedCharacterDetails">
+        <h3>Selected Character</h3>
+        <div id="characterDetailsContent">Select a character to see details</div>
+      </div>
+      <div id="pieceSelection">
+        <h3>Selected Characters</h3>
+        <div id="pieceSelectionContent"></div>
+        <button id="clearPieces">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Additional initialization to ensure everything loads properly
+    window.addEventListener('load', function() {
+      console.log('Window load event fired');
+      
+      // Initialize counters
+      function updateCounters() {
+        const currentPiecesEl = document.getElementById('currentPiecesValue');
+        const boardFilledEl = document.getElementById('boardFilledValue');
+        const characterCountEl = document.getElementById('currentCaracterCountValue');
+        
+        if (localStorage.getItem('currentPieces')) {
+          currentPiecesEl.textContent = localStorage.getItem('currentPieces');
+        }
+        
+        if (localStorage.getItem('boardFilled')) {
+          boardFilledEl.textContent = localStorage.getItem('boardFilled');
+        }
+        
+        if (localStorage.getItem('characterCount')) {
+          characterCountEl.textContent = localStorage.getItem('characterCount');
+        }
+        
+        console.log('Counters updated');
+      }
+      
+      updateCounters();
+      
+      // Set up Dark Mode toggle
+      const darkModeCheckbox = document.getElementById('darkMode');
+      if (darkModeCheckbox) {
+        // Set initial state from localStorage
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.body.classList.add('dark-mode');
+          darkModeCheckbox.checked = true;
+        }
+        
+        // Add change listener
+        darkModeCheckbox.addEventListener('change', function() {
+          if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'true');
+          } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'false');
+          }
+        });
+      }
+      
+      // Update counters directly
+      updateCounters();
+      
+      console.log('Load complete');
+    });
+  </script>
 </body>
 </html>

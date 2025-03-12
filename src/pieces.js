@@ -1,92 +1,103 @@
 import { Piece } from './modules/piece.js';
 import { sumBy } from 'lodash';
 import { i18n, getCurrentLanguage } from './i18n.js';
+import { saveCurrentState } from './characters.js';
+
+// Constants for localStorage keys to match those in characters.js
+const STORAGE_KEYS = {
+    SELECTED_CHARACTERS: 'legionSolver_selectedCharacters',
+    BOARD_STATE: 'legionBoard',
+    BOARD_FILLED: 'boardFilled',
+    PIECE_AMOUNTS: 'pieceAmounts',
+    CURRENT_PIECES: 'currentPieces'
+};
 
 // TODO: Remove extra 2s.
 
+// Fixed and verified piece shapes for all character classes and levels
 const defaultPieces = [
-    // Lvl 60
+    // Lvl 60 - Single cell (all classes)
     [
         [2]
     ],
 
-    // Lvl 100
+    // Lvl 100 - 1x2 rectangle (all classes)
     [
         [2, 2]
     ],
 
-    // Lvl 140 Warrior/Pirate
+    // Lvl 140 Warrior/Pirate - L shape
     [
         [1, 0],
         [2, 1]
     ],
 
-    // Lvl 140 Mage/Thief/Archer
+    // Lvl 140 Mage/Thief/Archer - Horizontal 3 cells
     [
         [1, 2, 1]
     ],
 
-    // Lvl 200 Warrior
+    // Lvl 200 Warrior - 2x2 square
     [
         [2, 2],
         [2, 2]
     ],
 
-    // Lvl 200 Archer
+    // Lvl 200 Archer - Horizontal 4 cells with pattern
     [
         [1, 2, 2, 1]
     ],
 
-    // Lvl 200 Thief/Lab
+    // Lvl 200 Thief/Lab - T shape
     [
         [1, 0, 0],
         [1, 2, 1]
     ],
 
-    // Lvl 200 Mage
+    // Lvl 200 Mage - Plus shape
     [
         [0, 1, 0],
         [1, 2, 1]
     ],
 
-    // Lvl 200 Pirate
+    // Lvl 200 Pirate - Z shape
     [
         [1, 2, 0],
         [0, 2, 1]
     ],
 
-    // Lvl 250 Warrior
+    // Lvl 250 Warrior - Corner shape
     [
         [1, 1, 2],
         [0, 1, 1]
     ],
 
-    // Lvl 250 Archer
+    // Lvl 250 Archer - Horizontal 5 cells
     [
-        [1, 1, 2, 1, 1],
+        [1, 1, 2, 1, 1]
     ],
 
-    // Lvl 250 Thief/Ride or Die
+    // Lvl 250 Thief - H shape
     [
         [0, 0, 1],
         [1, 2, 1],
         [0, 0, 1]
     ],
 
-    // Lvl 250 Mage
+    // Lvl 250 Mage - Cross shape
     [
         [0, 1, 0],
         [1, 2, 1],
         [0, 1, 0]
     ],
 
-    // Lvl 250 Pirate/Abyssal
+    // Lvl 250 Pirate - 7 shape
     [
         [1, 2, 0, 0],
         [0, 1, 1, 1]
     ],
 
-    // Lvl 250 Xenon
+    // Lvl 250 Xenon - Triangle shape
     [
         [1, 1, 0],
         [0, 2, 0],
@@ -114,6 +125,7 @@ const gmsPieces = [
     ],
 ];
 
+// Create pieces from the defined shapes
 const pieces = []
 for (let piece of defaultPieces){
     pieces.push(Piece.createPiece(piece, 0));
@@ -153,97 +165,176 @@ for (let i = 0; i < 2; i++) {
     pieceColours.set(18 + i * 18, 'aquamarine');
 }
 
-for (let i = 0; i < pieces.length; i++) {
-    let row = '<td class="pieceCell"></td>'.repeat(pieces[i].shape[0].length);
-    let grid = `<tr>${row}</tr>`.repeat(pieces[i].shape.length);
-    document.querySelector('#pieceForm form').innerHTML += `<div class="piece">
-        <div id="pieceDescription${i+1}"></div>
-        <label for="piece${i+1}">
-            <table id="pieceDisplay${i+1}">
-                <tbody>${grid}</tbody>
-            </table>
-        </label>
-        <input id="piece${i+1}" type="number" min=0 value=0>
-    </div>`;
+// Create hidden piece display elements for the solver to use (compatibility with old code)
+function createHiddenPieceDisplays() {
+    if (!document.querySelector('#pieceForm form')) {
+        return; // Wait for the DOM to be ready
+    }
+    
+    for (let i = 0; i < pieces.length; i++) {
+        let row = '<td class="pieceCell"></td>'.repeat(pieces[i].shape[0].length);
+        let grid = `<tr>${row}</tr>`.repeat(pieces[i].shape.length);
+        document.querySelector('#pieceForm form').innerHTML += `<div class="piece">
+            <div id="pieceDescription${i+1}"></div>
+            <label for="piece${i+1}">
+                <table id="pieceDisplay${i+1}">
+                    <tbody>${grid}</tbody>
+                </table>
+            </label>
+            <input id="piece${i+1}" type="number" min=0 value=0>
+        </div>`;
 
-    document.getElementById(`pieceDisplay${i+1}`).style.borderCollapse = 'collapse';
-    document.getElementById(`pieceDisplay${i+1}`).style.borderSpacing = '0';
-    document.getElementById(`pieceDescription${i+1}`).style.paddingRight = '15px';
+        document.getElementById(`pieceDisplay${i+1}`).style.borderCollapse = 'collapse';
+        document.getElementById(`pieceDisplay${i+1}`).style.borderSpacing = '0';
+        document.getElementById(`pieceDescription${i+1}`).style.paddingRight = '15px';
 
-    for (let j = 0; j < pieces[i].shape.length; j++) {
-        for (let k = 0; k < pieces[i].shape[j].length; k++) {
-            if (pieces[i].shape[j][k] != 0) {
-                document.getElementById(`pieceDisplay${i+1}`)
-                .getElementsByTagName("tr")[j]
-                .getElementsByTagName("td")[k].style.background = pieceColours.get(i+1);
+        for (let j = 0; j < pieces[i].shape.length; j++) {
+            for (let k = 0; k < pieces[i].shape[j].length; k++) {
+                if (pieces[i].shape[j][k] != 0) {
+                    document.getElementById(`pieceDisplay${i+1}`)
+                    .getElementsByTagName("tr")[j]
+                    .getElementsByTagName("td")[k].style.background = pieceColours.get(i+1);
+                }
             }
         }
     }
+
+    // Set piece descriptions
+    document.getElementById('pieceDescription1').textContent = i18n('lvl60');
+    document.getElementById('pieceDescription2').textContent = i18n('lvl100');
+    document.getElementById('pieceDescription3').textContent = i18n('warriorPirate140');
+    document.getElementById('pieceDescription4').textContent = i18n('mageThiefArcher140');
+    document.getElementById('pieceDescription5').textContent = i18n('warrior200');
+    document.getElementById('pieceDescription6').textContent = i18n('archer200');
+    document.getElementById('pieceDescription7').textContent = i18n('thiefLab200');
+    document.getElementById('pieceDescription8').textContent = i18n('mage200');
+    document.getElementById('pieceDescription9').textContent = i18n('pirate200');
+    document.getElementById('pieceDescription10').textContent = i18n('warrior250');
+    document.getElementById('pieceDescription11').textContent = i18n('archer250');
+    document.getElementById('pieceDescription12').textContent = i18n('thief250');
+    document.getElementById('pieceDescription13').textContent = i18n('mage250');
+    document.getElementById('pieceDescription14').textContent = i18n('pirate250');
+    document.getElementById('pieceDescription15').textContent = i18n('xenon250');
+
+    if (hasLabPieces()) {
+        document.getElementById('pieceDescription16').textContent = i18n('enhancedLab200');
+        document.getElementById('pieceDescription17').textContent = i18n('enhancedLab250');
+        document.getElementById('pieceDescription18').textContent = i18n('lab250');
+    }
 }
 
-document.getElementById('pieceDescription1').textContent = i18n('lvl60');
-document.getElementById('pieceDescription2').textContent = i18n('lvl100');
-document.getElementById('pieceDescription3').textContent = i18n('warriorPirate140');
-document.getElementById('pieceDescription4').textContent = i18n('mageThiefArcher140');
-document.getElementById('pieceDescription5').textContent = i18n('warrior200');
-document.getElementById('pieceDescription6').textContent = i18n('archer200');
-document.getElementById('pieceDescription7').textContent = i18n('thiefLab200');
-document.getElementById('pieceDescription8').textContent = i18n('mage200');
-document.getElementById('pieceDescription9').textContent = i18n('pirate200');
-document.getElementById('pieceDescription10').textContent = i18n('warrior250');
-document.getElementById('pieceDescription11').textContent = i18n('archer250');
-document.getElementById('pieceDescription12').textContent = i18n('thief250');
-document.getElementById('pieceDescription13').textContent = i18n('mage250');
-document.getElementById('pieceDescription14').textContent = i18n('pirate250');
-document.getElementById('pieceDescription15').textContent = i18n('xenon250');
-
-if (hasLabPieces()) {
-    document.getElementById('pieceDescription16').textContent = i18n('enhancedLab200');
-    document.getElementById('pieceDescription17').textContent = i18n('enhancedLab250');
-    document.getElementById('pieceDescription18').textContent = i18n('lab250');
+// Wait for DOM to be ready before creating piece displays
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createHiddenPieceDisplays);
+} else {
+    createHiddenPieceDisplays();
 }
 
 let currentPieces = 0;
 let currentUseCaracterCount = 0;
-if (localStorage.getItem("currentPieces")) {
-    currentPieces = JSON.parse(localStorage.getItem("currentPieces"));
+if (localStorage.getItem(STORAGE_KEYS.CURRENT_PIECES)) {
+    currentPieces = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_PIECES));
     document.getElementById('currentPiecesValue').innerText = `${currentPieces}`;
 }
 
-let pieceAmounts = JSON.parse(localStorage.getItem("pieceAmounts"))
+let pieceAmounts = JSON.parse(localStorage.getItem(STORAGE_KEYS.PIECE_AMOUNTS))
 if (pieceAmounts) {
-    for (let i = 0; i < pieces.length; i++) {
-        document.getElementById(`piece${i+1}`).value = pieceAmounts[i] || 0;
-    }
-
-    updateCurrentPieces();
+    document.addEventListener('DOMContentLoaded', () => {
+        for (let i = 0; i < pieces.length; i++) {
+            const pieceInput = document.getElementById(`piece${i+1}`);
+            if (pieceInput) {
+                pieceInput.value = pieceAmounts[i] || 0;
+            }
+        }
+        updateCurrentPieces();
+    });
 }
 
-document.getElementById('pieceForm').addEventListener("input", updateCurrentPieces);
+// Add event listener after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const pieceForm = document.getElementById('pieceForm');
+    if (pieceForm) {
+        pieceForm.addEventListener("input", updateCurrentPieces);
+    }
+    
+    // No longer need the original clear button event as it's handled in characters.js
+});
 
 function updateCurrentPieces() {
-    for (let piece of pieces) {
-        piece.amount = parseInt(document.getElementById(`piece${piece.id}`).value) || 0;
+    // Prevent recursion
+    if (window._isUpdatingCurrentPieces) {
+        console.log("Already updating current pieces, preventing recursion");
+        return;
     }
+    
+    window._isUpdatingCurrentPieces = true;
+    
+    try {
+        console.log("Updating current pieces");
+        
+        // Preserve the current boardFilled value if we're not in the START state
+        const solverState = document.getElementById("boardButton")?.innerText || "";
+        const isAfterStart = solverState && solverState !== i18n("start");
+        const currentBoardFilled = isAfterStart ? localStorage.getItem(STORAGE_KEYS.BOARD_FILLED) : null;
+        
+        for (let piece of pieces) {
+            const pieceInput = document.getElementById(`piece${piece.id}`);
+            if (pieceInput) {
+                piece.amount = parseInt(pieceInput.value) || 0;
+            }
+        }
 
-    currentPieces = sumBy(pieces, piece => piece.cellCount * piece.amount);
-    currentUseCaracterCount = sumBy(pieces, (piece) => piece.amount);
+        currentPieces = sumBy(pieces, piece => piece.cellCount * piece.amount);
+        currentUseCaracterCount = sumBy(pieces, (piece) => piece.amount);
 
-    localStorage.setItem("pieceAmounts", JSON.stringify(pieces.map(piece => piece.amount)));
-    localStorage.setItem("currentPieces", JSON.stringify(currentPieces));
+        localStorage.setItem(STORAGE_KEYS.PIECE_AMOUNTS, JSON.stringify(pieces.map(piece => piece.amount)));
+        localStorage.setItem(STORAGE_KEYS.CURRENT_PIECES, JSON.stringify(currentPieces));
 
-    document.getElementById('currentPiecesValue').innerText = `${currentPieces}`;
-    document.getElementById("currentCaracterCountValue").innerText = `${currentUseCaracterCount}`;
+        const currentPiecesValue = document.getElementById('currentPiecesValue');
+        if (currentPiecesValue) {
+            currentPiecesValue.innerText = `${currentPieces}`;
+        }
+        
+        const currentCaracterCountValue = document.getElementById("currentCaracterCountValue");
+        if (currentCaracterCountValue) {
+            currentCaracterCountValue.innerText = `${currentUseCaracterCount}`;
+        }
+        
+        // Restore boardFilled if we're not in the START state
+        if (isAfterStart && currentBoardFilled) {
+            console.log(`Preserving boardFilled value (${currentBoardFilled}) in updateCurrentPieces`);
+            localStorage.setItem(STORAGE_KEYS.BOARD_FILLED, currentBoardFilled);
+            
+            // Update the display
+            const boardFilledDisplay = document.getElementById('boardFilledValue');
+            if (boardFilledDisplay) {
+                boardFilledDisplay.innerText = JSON.parse(currentBoardFilled);
+            }
+        }
+        
+        // IMPORTANT: Only save the state if we aren't already in a save operation
+        if (!window._isSavingPreset) {
+            saveCurrentState();
+        }
+    } finally {
+        window._isUpdatingCurrentPieces = false;
+    }
 }
-
-document.getElementById("clearPieces").addEventListener("click", clearPieces);
 
 function clearPieces() {
     for (let i = 0; i < pieces.length; i++) {
-        document.getElementById(`piece${i+1}`).value = 0;
+        const pieceInput = document.getElementById(`piece${i+1}`);
+        if (pieceInput) {
+            pieceInput.value = 0;
+        }
     }
 
     updateCurrentPieces();
 }
 
-export { pieceColours, pieces };
+// Make pieces accessible globally
+window.pieces = pieces;
+window.currentPieces = currentPieces;
+window.currentUseCaracterCount = currentUseCaracterCount;
+
+export { pieceColours, pieces, updateCurrentPieces, clearPieces };

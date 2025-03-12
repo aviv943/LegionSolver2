@@ -1,6 +1,12 @@
 body {
     display: flex;
     flex-direction: column;
+    font-family: 'Arial', sans-serif;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    max-width: 1200px;
 }
 
 form {
@@ -12,6 +18,7 @@ form {
     justify-content: center;
     align-items: center;
     margin-top: 0;
+    color: #333;
 }
 
 #header {
@@ -21,11 +28,15 @@ form {
 
 #subtitle {
     text-align: center;
+    color: #666;
+    margin-bottom: 5px;
 }
 
 #legionBoard {
     border-spacing: 0;
     border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: white;
 }
 
 #legionBoard td.legionCell {
@@ -33,15 +44,23 @@ form {
     height: 27px;
     border-style: solid;
     border-width: 1px;
+    transition: background-color 0.2s;
+}
+
+#legionWrapper {
+    display: flex;
+    justify-content: center;
 }
 
 #legion {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 #legionFooter {
     margin-top: 10px;
+    width: 100%;
 }
 
 #options {
@@ -82,44 +101,508 @@ form {
     align-items: center;
 }
 
-#pieceForm {
+/* New Character Selection Panel Styles */
+#characterSelectionPanel {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+#characterSelectionPanel h2 {
+    text-align: center;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+#classCategories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+/* Styling for preset buttons */
+.presetBtn {
+    padding: 6px 12px;
+    background-color: #19a7c0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s;
+    border-bottom: 2px solid #4a6fa5;
+    margin: 0 5px;
+    min-width: 80px;
+}
+
+.presetBtn:hover {
+    background-color: #e8e8e8;
+}
+
+.presetBtn.active {
+    background-color: #4a6fa5;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Legacy category button styles - kept for reference */
+.categoryBtn {
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+}
+
+/* Add class-specific colors to category buttons */
+.categoryBtn[data-category="warrior"] {
+    border-bottom: 2px solid #800000;
+}
+
+.categoryBtn[data-category="mage"] {
+    border-bottom: 2px solid #1e3a8a;
+}
+
+.categoryBtn[data-category="thief"] {
+    border-bottom: 2px solid #4b0082;
+}
+
+.categoryBtn[data-category="archer"] {
+    border-bottom: 2px solid #006400;
+}
+
+.categoryBtn[data-category="pirate"] {
+    border-bottom: 2px solid #5f9ea0;
+}
+
+.categoryBtn[data-category="special"] {
+    border-bottom: 2px solid #9370db;
+}
+
+.categoryBtn.active[data-category="warrior"] {
+    background-color: #800000;
+    color: white;
+}
+
+.categoryBtn.active[data-category="mage"] {
+    background-color: #1e3a8a;
+    color: white;
+}
+
+.categoryBtn.active[data-category="thief"] {
+    background-color: #4b0082;
+    color: white;
+}
+
+.categoryBtn.active[data-category="archer"] {
+    background-color: #006400;
+    color: white;
+}
+
+.categoryBtn.active[data-category="pirate"] {
+    background-color: #5f9ea0;
+    color: white;
+}
+
+.categoryBtn.active[data-category="special"] {
+    background-color: #9370db;
+    color: white;
+}
+
+.categoryBtn.active[data-category="all"] {
+    background-color: #4a6fa5;
+    color: white;
+}
+
+#characterSelector {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    padding-right: 20px;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-#pieceForm td.pieceCell {
-    width: 7px;
-    height: 9px;
-    border-style: solid;
-    border-width: 0px;
+/* Style for the container holding all characters - to be replaced */
+.all-characters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
 }
 
-.piece {
+/* Style for the container with class sections */
+.character-sections-container {
     display: flex;
-    flex-direction: row;
-    margin-bottom: 15px;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
 
-#resetButton {
+/* Style for each class section */
+.character-section {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+    border: 1px solid #eaeaea;
+}
+
+/* Style for class section headers */
+.character-section-header {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 12px;
+    margin: 0 0 6px 0;
+    color: white;
+    background-color: #4A4A4A;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    border-radius: 4px 4px 0 0;
+}
+
+.character-section-header:hover {
+    opacity: 0.95;
+}
+
+.section-toggle {
+    font-size: 11px;
+    transition: transform 0.2s;
+}
+
+/* Class-specific header colors - more visually appealing */
+.character-section:has([data-class="warrior"]) .character-section-header {
+    background-color: #FF5252; /* Vibrant red for warriors */
+}
+
+.character-section:has([data-class="mage"]) .character-section-header {
+    background-color: #448AFF; /* Bright blue for mages */
+}
+
+.character-section:has([data-class="thief"]) .character-section-header {
+    background-color: #9C27B0; /* Vibrant purple for thieves */
+}
+
+.character-section:has([data-class="archer"]) .character-section-header {
+    background-color: #4CAF50; /* Fresh green for archers */
+}
+
+.character-section:has([data-class="pirate"]) .character-section-header {
+    background-color: #FF9800; /* Bright orange for pirates */
+}
+
+.character-section:has([data-class="special"]) .character-section-header {
+    background-color: #7986CB; /* Soft indigo for special classes */
+}
+
+/* Style for the character cards container within each section */
+.character-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 6px;
+    padding: 0 10px 8px 10px;
+}
+
+.class-section-header {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 10px;
     margin-top: 5px;
+    border-radius: 4px;
+    color: white;
+    display: flex;
+    align-items: center;
 }
 
-#failText {
-    text-align: right;
-    visibility: hidden;
+.class-section-header::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.7);
+    margin-right: 8px;
 }
 
-#bigClick, #liveSolve {
-    margin-left: 20px;
+.class-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    padding-bottom: 5px;
 }
 
-#pieceForm input {
-    width: 50px;
-    height: 20px;
-    margin-left: 10px;
+/* Class-specific headers */
+.class-section-header[data-class="warrior"] {
+    background-color: #800000; /* Burgundy red for warriors */
+}
+
+.class-section-header[data-class="mage"] {
+    background-color: #1e3a8a; /* Deep blue for mages/wizards */
+}
+
+.class-section-header[data-class="thief"] {
+    background-color: #4b0082; /* Purple for thieves */
+}
+
+.class-section-header[data-class="archer"] {
+    background-color: #006400; /* Dark green for archers */
+}
+
+.class-section-header[data-class="pirate"] {
+    background-color: #5f9ea0; /* Cadet blue for pirates */
+}
+
+.class-section-header[data-class="special"] {
+    background-color: #9370db; /* Medium purple for special classes */
+}
+
+/* Character card styling - more compact */
+.characterCard {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 6px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: 42px;
+    justify-content: space-between;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.characterCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-color: #c0c0c0;
+}
+
+.characterCard.selected {
+    border-color: #4a6fa5;
+    background-color: #f0f7ff;
+    box-shadow: 0 1px 3px rgba(74, 111, 165, 0.25);
+}
+
+/* Class-based styling for character cards with light background colors */
+.characterCard[data-class="warrior"] {
+    background-color: rgba(128, 0, 0, 0.08);
+    border-left: 3px solid #800000; /* Burgundy red for warriors */
+}
+
+.characterCard[data-class="mage"] {
+    background-color: rgba(30, 58, 138, 0.08);
+    border-left: 3px solid #1e3a8a; /* Deep blue for mages/wizards */
+}
+
+.characterCard[data-class="thief"] {
+    background-color: rgba(75, 0, 130, 0.08);
+    border-left: 3px solid #4b0082; /* Purple for thieves */
+}
+
+.characterCard[data-class="archer"] {
+    background-color: rgba(0, 100, 0, 0.08);
+    border-left: 3px solid #006400; /* Dark green for archers */
+}
+
+.characterCard[data-class="pirate"] {
+    background-color: rgba(95, 158, 160, 0.08);
+    border-left: 3px solid #5f9ea0; /* Cadet blue for pirates */
+}
+
+.characterCard[data-class="special"] {
+    background-color: rgba(147, 112, 219, 0.08);
+    border-left: 3px solid #9370db; /* Medium purple for special classes */
+}
+
+.characterName {
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 2px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.characterClass {
+    font-size: 11px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 1px;
+}
+
+.effect-icon {
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+}
+
+.effect-text {
+    max-width: 86px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+#characterInfo {
+    display: flex;
+    margin-top: 15px;
+    gap: 15px;
+}
+
+#selectedCharacterDetails, #pieceSelection {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 12px;
+    border-radius: 5px;
+}
+
+#selectedCharacterDetails h3, #pieceSelection h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #444;
+}
+
+#characterDetailsContent {
+    color: #666;
+    font-style: italic;
+}
+
+#pieceSelectionContent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.selectedPiece {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.selectedPiece .selectedPieceInfo {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.selectedPiece .characterName {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.selectedPiece .characterLevel {
+    font-size: 11px;
+    color: #666;
+}
+
+.selectedPiece[data-character-class="warrior"] {
+    background-color: rgba(128, 0, 0, 0.05);
+    border-left: 3px solid #800000; /* Burgundy red for warriors */
+}
+
+.selectedPiece[data-character-class="mage"] {
+    background-color: rgba(30, 58, 138, 0.05);
+    border-left: 3px solid #1e3a8a; /* Deep blue for mages/wizards */
+}
+
+.selectedPiece[data-character-class="thief"] {
+    background-color: rgba(75, 0, 130, 0.05);
+    border-left: 3px solid #4b0082; /* Purple for thieves */
+}
+
+.selectedPiece[data-character-class="archer"] {
+    background-color: rgba(0, 100, 0, 0.05);
+    border-left: 3px solid #006400; /* Dark green for archers */
+}
+
+.selectedPiece[data-character-class="pirate"] {
+    background-color: rgba(95, 158, 160, 0.05);
+    border-left: 3px solid #5f9ea0; /* Cadet blue for pirates */
+}
+
+.selectedPiece[data-character-class="special"] {
+    background-color: rgba(147, 112, 219, 0.05);
+    border-left: 3px solid #9370db; /* Medium purple for special classes */
+}
+
+.removePieceBtn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #999;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.removePieceBtn:hover {
+    color: #e74c3c;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4a6fa5;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #3d5d8a;
+}
+
+#clearPieces, #clearBoard, #resetButton {
+    background-color: #d32f2f;
+}
+
+#clearPieces:hover, #clearBoard:hover, #resetButton:hover {
+    background-color: #b71c1c;
+}
+
+#boardButton {
+    background-color: #2e7d32;
+}
+
+#boardButton:hover {
+    background-color: #1b5e20;
 }
 
 .centerMiddleChild {
@@ -131,7 +614,7 @@ form {
 }
 
 #instructions {
-    margin-left: 30px;
+    display: none;
 }
 
 #paragraph {
@@ -140,4 +623,343 @@ form {
 
 #currentPieces {
     white-space: nowrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #legionWrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #instructions {
+        display: none;
+        margin-left: 0;
+        margin-top: 20px;
+    }
+    
+    #paragraph {
+        padding-right: 0;
+    }
+    
+    #characterInfo {
+        flex-direction: column;
+    }
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark-mode #title, 
+body.dark-mode h2, 
+body.dark-mode h3 {
+    color: #f0f0f0;
+}
+
+body.dark-mode #subtitle {
+    color: #aaa;
+}
+
+body.dark-mode #legionBoard,
+body.dark-mode #characterSelectionPanel,
+body.dark-mode #selectedCharacterDetails, 
+body.dark-mode #pieceSelection {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .presetBtn {
+    background-color: #333;
+    color: #ddd;
+}
+
+body.dark-mode .presetBtn:hover {
+    background-color: #444;
+}
+
+body.dark-mode .presetBtn.active {
+    background-color: #5d84c0;
+}
+
+body.dark-mode .categoryBtn {
+    background-color: #333;
+    color: #ddd;
+}
+
+body.dark-mode .categoryBtn:hover {
+    background-color: #444;
+}
+
+body.dark-mode .categoryBtn.active {
+    background-color: #5d84c0;
+}
+
+body.dark-mode .characterCard {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+body.dark-mode .characterCard:hover {
+    background-color: #333;
+    border-color: #444;
+}
+
+body.dark-mode .characterName {
+    color: #e0e0e0;
+}
+
+body.dark-mode .characterClass {
+    color: #aaa;
+}
+
+body.dark-mode .character-section {
+    background-color: #222;
+    border-color: #333;
+}
+
+body.dark-mode .character-section-header {
+    background-color: #333;
+}
+
+/* Adjust the colors slightly for dark mode */
+body.dark-mode .character-section:has([data-class="warrior"]) .character-section-header {
+    background-color: #C62828; /* Darker red for dark mode */
+}
+
+body.dark-mode .character-section:has([data-class="mage"]) .character-section-header {
+    background-color: #1976D2; /* Darker blue for dark mode */
+}
+
+body.dark-mode .character-section:has([data-class="thief"]) .character-section-header {
+    background-color: #7B1FA2; /* Darker purple for dark mode */
+}
+
+body.dark-mode .character-section:has([data-class="archer"]) .character-section-header {
+    background-color: #2E7D32; /* Darker green for dark mode */
+}
+
+body.dark-mode .character-section:has([data-class="pirate"]) .character-section-header {
+    background-color: #E65100; /* Darker orange for dark mode */
+}
+
+body.dark-mode .character-section:has([data-class="special"]) .character-section-header {
+    background-color: #5C6BC0; /* Darker indigo for dark mode */
+}
+
+body.dark-mode .selectedPiece {
+    background-color: #333;
+    border: 1px solid #555;
+}
+
+body.dark-mode #characterDetailsContent {
+    background-color: #222;
+}
+
+.characterDetailCard {
+    padding: 15px;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    border-left: 3px solid #4a6fa5;
+}
+
+.characterDetailCard h4 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.characterDetailCard p {
+    margin: 6px 0;
+    line-height: 1.4;
+    color: #555;
+}
+
+/* Class-specific styles for the detail view */
+.characterDetailCard[data-class="warrior"] {
+    background-color: rgba(128, 0, 0, 0.05);
+    border-left: 3px solid #800000;
+}
+
+.characterDetailCard[data-class="mage"] {
+    background-color: rgba(30, 58, 138, 0.05);
+    border-left: 3px solid #1e3a8a;
+}
+
+.characterDetailCard[data-class="thief"] {
+    background-color: rgba(75, 0, 130, 0.05);
+    border-left: 3px solid #4b0082;
+}
+
+.characterDetailCard[data-class="archer"] {
+    background-color: rgba(0, 100, 0, 0.05);
+    border-left: 3px solid #006400;
+}
+
+.characterDetailCard[data-class="pirate"] {
+    background-color: rgba(95, 158, 160, 0.05);
+    border-left: 3px solid #5f9ea0;
+}
+
+.characterDetailCard[data-class="special"] {
+    background-color: rgba(147, 112, 219, 0.05);
+    border-left: 3px solid #9370db;
+}
+
+#addCharacterBtn {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 8px;
+    background-color: #4a6fa5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#addCharacterBtn:hover {
+    background-color: #3d5d8a;
+}
+
+/* Level Selection Styles */
+.level-selection {
+    margin: 12px 0;
+    padding: 8px 10px;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+}
+
+.level-selection p {
+    margin-top: 0;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #444;
+}
+
+.level-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 4px;
+}
+
+.level-option {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px 2px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    transition: all 0.2s;
+    font-size: 12px;
+    text-align: center;
+}
+
+.level-option:hover {
+    background-color: #e8e8e8;
+}
+
+.level-option input[type="radio"] {
+    margin-right: 2px;
+    transform: scale(0.8);
+}
+
+.level-option input[type="radio"]:checked + span {
+    font-weight: bold;
+    color: #4a6fa5;
+}
+
+.level-option:has(input[type="radio"]:checked) {
+    background-color: #e0e7f5;
+    border-color: #a0c0e0;
+}
+
+/* Piece Shape Visualization */
+.piece-preview {
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: middle;
+  transform: scale(0.9);
+}
+
+.piece-shape-visual {
+  margin: 5px 0;
+  display: inline-block;
+}
+
+/* Add the following classes for piece colors */
+.selectedPiece.piece-lvl60 {
+    border-left: 4px solid lightpink;
+}
+.selectedPiece.piece-lvl100 {
+    border-left: 4px solid lightcoral;
+}
+.selectedPiece.piece-lvl140-warrior-pirate {
+    border-left: 4px solid indianred;
+}
+.selectedPiece.piece-lvl140-mage-thief-archer {
+    border-left: 4px solid darkseagreen;
+}
+.selectedPiece.piece-lvl200-warrior {
+    border-left: 4px solid firebrick;
+}
+.selectedPiece.piece-lvl200-archer {
+    border-left: 4px solid mediumseagreen;
+}
+.selectedPiece.piece-lvl200-thief-lab {
+    border-left: 4px solid purple;
+}
+.selectedPiece.piece-lvl200-mage {
+    border-left: 4px solid dodgerblue;
+}
+.selectedPiece.piece-lvl200-pirate {
+    border-left: 4px solid lightsteelblue;
+}
+.selectedPiece.piece-lvl250-warrior {
+    border-left: 4px solid maroon;
+}
+.selectedPiece.piece-lvl250-archer {
+    border-left: 4px solid green;
+}
+.selectedPiece.piece-lvl250-thief {
+    border-left: 4px solid indigo;
+}
+.selectedPiece.piece-lvl250-mage {
+    border-left: 4px solid blue;
+}
+.selectedPiece.piece-lvl250-pirate {
+    border-left: 4px solid cadetblue;
+}
+.selectedPiece.piece-lvl250-xenon {
+    border-left: 4px solid mediumpurple;
+}
+.selectedPiece.piece-lab-enhanced {
+    border-left: 4px solid aquamarine;
+}
+
+.categoryBtn:hover {
+    background-color: #e8e8e8;
+}
+
+.filterContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+body.dark-mode .characterCard.selected {
+    background-color: #3a3a3a;
+    border-color: #5d84c0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }

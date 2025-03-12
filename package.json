@@ -21,7 +21,7 @@
     "style-loader": "^2.0.0",
     "webpack": "^5.17.0",
     "webpack-cli": "^4.4.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.15.1"
   },
   "scripts": {
     "dev": "npx webpack serve --config webpack.config.dev.cjs",

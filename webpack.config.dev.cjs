@@ -6,9 +6,12 @@ const languages = ['GMS', 'KMS', 'JMS', 'TMS', 'CMS'];
 module.exports = {
     devServer: {
         compress: true,
-        contentBase: path.join(__dirname, 'dist'),
+        static: {
+            directory: path.join(__dirname, 'dist')
+        },
         open: true,
-        watchContentBase: true
+        watchFiles: ['src/**/*'],
+        port: 3000
     },
     entry: './src/main.js',
     output: {

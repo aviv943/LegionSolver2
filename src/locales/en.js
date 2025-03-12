@@ -1,5 +1,5 @@
 export default {
-    title: 'Legion Solver',
+    title: 'Legion Solver v2',
     instructions: 'Instructions:',
     instructionsSub1: '1. Click the grid spaces you want to be filled, the region click will help you fill it in faster.',
     instructionsSub2: '2. Input the amount of each shape you want to be filled in the board.',

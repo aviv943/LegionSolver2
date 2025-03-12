@@ -2,17 +2,63 @@ import { Point } from './modules/point.js';
 import { LegionSolver } from './modules/legion_solver.js';
 import { pieceColours, pieces } from './pieces.js';
 import { i18n } from './i18n.js';
+import { saveCurrentState, updatePiecesAndSavePreset } from './characters.js';
 
-let board = JSON.parse(localStorage.getItem("legionBoard"));
+// Constants for localStorage keys to match those in characters.js
+const STORAGE_KEYS = {
+    SELECTED_CHARACTERS: 'legionSolver_selectedCharacters_preset_',
+    BOARD_STATE: 'legionBoard_preset_',
+    BOARD_FILLED: 'boardFilled_preset_',
+    ACTIVE_PRESET: 'legionSolver_activePreset'
+};
+
+// Get active preset from localStorage or default to 1
+let activePreset = localStorage.getItem(STORAGE_KEYS.ACTIVE_PRESET) ? 
+    parseInt(localStorage.getItem(STORAGE_KEYS.ACTIVE_PRESET)) : 1;
+
+// Use the preset-specific board state if available
+let boardKey = `${STORAGE_KEYS.BOARD_STATE}${activePreset}`;
+let board = JSON.parse(localStorage.getItem(boardKey));
+
+// Initialize board size variables
+const BOARD_ROWS = 20;
+const BOARD_COLS = 22;
+
+// If no board state exists for this preset, initialize a new one
 if (!board) {
+    console.log(`Initializing new board for preset ${activePreset}`);
     board = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < BOARD_ROWS; i++) {
         board[i] = [];
-        for (let j = 0; j < 22; j++) {
+        for (let j = 0; j < BOARD_COLS; j++) {
             board[i][j] = -1;
         }
     }
+    // Save the initialized board to both preset-specific and default keys
+    localStorage.setItem(boardKey, JSON.stringify(board));
+    localStorage.setItem('legionBoard', JSON.stringify(board));
+} else {
+    console.log(`Loaded existing board for preset ${activePreset}`);
+    // Copy the preset-specific board to the default key for compatibility
+    localStorage.setItem('legionBoard', JSON.stringify(board));
 }
+
+// Initialize boardFilled count from preset storage or set to 0
+let boardFilledKey = `${STORAGE_KEYS.BOARD_FILLED}${activePreset}`;
+let boardFilled = localStorage.getItem(boardFilledKey) ? 
+    JSON.parse(localStorage.getItem(boardFilledKey)) : 0;
+
+// Ensure standard key is set for compatibility with solver
+localStorage.setItem('boardFilled', JSON.stringify(boardFilled));
+
+// Update boardFilled display if the element exists
+document.addEventListener('DOMContentLoaded', () => {
+    const boardFilledDisplay = document.getElementById('boardFilledValue');
+    if (boardFilledDisplay) {
+        boardFilledDisplay.innerText = boardFilled;
+    }
+});
+
 let legionSolvers = [];
 let pieceHistory = [];
 
@@ -35,11 +81,124 @@ document.querySelector('#legionBoard tbody').innerHTML =
 drawBoard();
 setLegionGroups();
 
-let boardFilled = 0;
-if (localStorage.getItem("boardFilled")) {
-    boardFilled = JSON.parse(localStorage.getItem("boardFilled"));
-    document.getElementById('boardFilledValue').innerText = `${boardFilled}`;
+// Recalculate boardFilled from actual board state
+for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+        if (board[i][j] === 0) {
+            boardFilled++;
+        }
+    }
 }
+
+// Update localStorage with the calculated value
+localStorage.setItem(boardFilledKey, JSON.stringify(boardFilled));
+
+// Update the counter display
+document.getElementById('boardFilledValue').innerText = `${boardFilled}`;
+
+// Function to update the board display based on the current board state
+function updateBoardDisplay() {
+    console.log('Updating board display');
+    
+    // Get the active preset
+    activePreset = localStorage.getItem(STORAGE_KEYS.ACTIVE_PRESET) ? 
+        parseInt(localStorage.getItem(STORAGE_KEYS.ACTIVE_PRESET)) : 1;
+    
+    // Try to get the preset-specific board state first
+    const boardKey = `${STORAGE_KEYS.BOARD_STATE}${activePreset}`;
+    const boardFilledKey = `${STORAGE_KEYS.BOARD_FILLED}${activePreset}`;
+    
+    let boardData = localStorage.getItem(boardKey);
+    
+    // If no preset-specific board exists, fall back to the standard key
+    if (!boardData) {
+        console.log(`No board state found for preset ${activePreset}, checking standard key`);
+        boardData = localStorage.getItem('legionBoard');
+    }
+    
+    // Parse the board data if it exists
+    if (boardData) {
+        board = JSON.parse(boardData);
+        console.log(`Loaded board state for preset ${activePreset}`);
+        
+        // Save to standard key for compatibility with solver
+        localStorage.setItem('legionBoard', boardData);
+        
+        // Recalculate boardFilled
+        boardFilled = 0;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[0].length; j++) {
+                if (board[i][j] === 0) {
+                    boardFilled++;
+                }
+            }
+        }
+        
+        // Save boardFilled to both preset-specific and standard keys
+        localStorage.setItem(boardFilledKey, JSON.stringify(boardFilled));
+        localStorage.setItem('boardFilled', JSON.stringify(boardFilled));
+        
+        // Update the visual display of the board
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[0].length; j++) {
+                const cell = getLegionCell(i, j);
+                if (cell) {
+                    cell.style.background = pieceColours.get(board[i][j]);
+                }
+            }
+        }
+        
+        // Update the counter display
+        const boardFilledDisplay = document.getElementById('boardFilledValue');
+        if (boardFilledDisplay) {
+            boardFilledDisplay.innerText = `${boardFilled}`;
+        }
+        
+        // Update borders and colors
+        drawBoard();
+    } else {
+        console.error('No board state found when updating display');
+        
+        // Initialize new board if no state exists
+        board = [];
+        for (let i = 0; i < BOARD_ROWS; i++) {
+            board[i] = [];
+            for (let j = 0; j < BOARD_COLS; j++) {
+                board[i][j] = -1;
+            }
+        }
+        
+        boardFilled = 0;
+        
+        // Save the initialized board to both preset-specific and standard keys
+        localStorage.setItem(boardKey, JSON.stringify(board));
+        localStorage.setItem('legionBoard', JSON.stringify(board));
+        localStorage.setItem(boardFilledKey, JSON.stringify(0));
+        localStorage.setItem('boardFilled', JSON.stringify(0));
+        
+        // Update the counter display
+        const boardFilledDisplay = document.getElementById('boardFilledValue');
+        if (boardFilledDisplay) {
+            boardFilledDisplay.innerText = '0';
+        }
+        
+        // Update the board display
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[0].length; j++) {
+                const cell = getLegionCell(i, j);
+                if (cell) {
+                    cell.style.background = pieceColours.get(board[i][j]);
+                }
+            }
+        }
+        
+        // Update borders and colors
+        drawBoard();
+    }
+}
+
+// Make updateBoardDisplay globally accessible
+window.updateBoardDisplay = updateBoardDisplay;
 
 let isBigClick = false;
 if (localStorage.getItem("isBigClick")) {
@@ -181,16 +340,51 @@ function getLegionCell(i, j) {
 }
 
 function clearBoard() {
+    console.log(`Clearing board for preset ${activePreset}`);
+    
+    // Get the active preset
+    activePreset = localStorage.getItem(STORAGE_KEYS.ACTIVE_PRESET) ? 
+        parseInt(localStorage.getItem(STORAGE_KEYS.ACTIVE_PRESET)) : 1;
+    
+    // Clear the board array
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[0].length; j++) {
             board[i][j] = -1;
-            getLegionCell(i, j).style.background = pieceColours.get(board[i][j])
+            const cell = getLegionCell(i, j);
+            if (cell) {
+                cell.style.background = pieceColours.get(board[i][j]);
+            }
         }
     }
+    
+    // Reset the filled count
     boardFilled = 0;
-    localStorage.setItem("legionBoard", JSON.stringify(board));
-    localStorage.setItem("boardFilled", JSON.stringify(0));
-    document.getElementById('boardFilledValue').innerText = `${boardFilled}`;
+    
+    // Save to both preset-specific and standard keys
+    const boardKey = `${STORAGE_KEYS.BOARD_STATE}${activePreset}`;
+    const boardFilledKey = `${STORAGE_KEYS.BOARD_FILLED}${activePreset}`;
+    
+    localStorage.setItem(boardKey, JSON.stringify(board));
+    localStorage.setItem('legionBoard', JSON.stringify(board));
+    
+    localStorage.setItem(boardFilledKey, JSON.stringify(0));
+    localStorage.setItem('boardFilled', JSON.stringify(0));
+    
+    // Update the display
+    const boardFilledDisplay = document.getElementById('boardFilledValue');
+    if (boardFilledDisplay) {
+        boardFilledDisplay.innerText = '0';
+    }
+    
+    // Update borders and colors
+    drawBoard();
+    
+    // Save the complete state (both board and characters)
+    if (typeof updatePiecesAndSavePreset === 'function') {
+        updatePiecesAndSavePreset();
+    }
+    
+    console.log(`Board cleared for preset ${activePreset}`);
 }
 
 function setBoard(i, j, value) {
@@ -234,9 +428,21 @@ function setBoard(i, j, value) {
             }
         }
     }
-    localStorage.setItem("legionBoard", JSON.stringify(board));
-    localStorage.setItem("boardFilled", JSON.stringify(boardFilled));
+    
+    // Save to both preset-specific and standard keys
+    const boardKey = `${STORAGE_KEYS.BOARD_STATE}${activePreset}`;
+    const boardFilledKey = `${STORAGE_KEYS.BOARD_FILLED}${activePreset}`;
+    
+    localStorage.setItem(boardKey, JSON.stringify(board));
+    localStorage.setItem('legionBoard', JSON.stringify(board));
+    
+    localStorage.setItem(boardFilledKey, JSON.stringify(boardFilled));
+    localStorage.setItem('boardFilled', JSON.stringify(boardFilled));
+    
     document.getElementById('boardFilledValue').innerText = `${boardFilled}`;
+    
+    // Save the complete state (both board and characters)
+    updatePiecesAndSavePreset();
 }
 
 function hoverOverBoard(i, j) {
@@ -330,11 +536,29 @@ function drawBoard() {
 }
 
 function colourBoard() {
-    let spot;
+    let cell;
+    const isDarkMode = document.getElementById("darkMode").checked;
+    
+    // Set colors based on dark mode
+    if (isDarkMode) {
+        pieceColours.set(-1, '#2a2a2a');
+        pieceColours.set(0, '#444');
+    } else {
+        pieceColours.set(-1, 'white');
+        pieceColours.set(0, 'grey');
+    }
+    
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[0].length; j++) {
-            spot = board[i][j];
-            getLegionCell(i, j).style.background = pieceColours.get(spot);
+            if (board[i][j] != -1) {
+                let cell = getLegionCell(i, j);
+                let group = findGroupNumber(i, j);
+                if (board[i][j] == 0) {
+                    cell.style.background = pieceColours.get(0);
+                } else if (board[i][j] > 0) {
+                    cell.style.background = pieceColours.get(board[i][j]);
+                }
+            }
         }
     }
 
@@ -371,51 +595,25 @@ function colourBoard() {
 }
 
 function activateDarkMode() {
-    isDarkMode = !isDarkMode;
+    let isDarkMode = document.getElementById("darkMode").checked;
+
     localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
-    let cell;
-    let switchTo;
-    if (isDarkMode) {
-        switchTo = 'white';
-        document.getElementById("body").style.backgroundColor = 'rgb(54, 57, 63)';
-        for (let i = 0 ; i < pieces.length; i++) {
-            document.getElementById(`piece${i+1}`).style.backgroundColor = 'silver';
-        }
-        pieceColours.set(-1, 'grey');
-        pieceColours.set(0, 'rgb(50, 50, 50)');
+
+    if(isDarkMode) {
+        document.body.classList.add('dark-mode');
     } else {
-        switchTo = 'black';
-        document.getElementById("body").style.backgroundColor = 'white';
-        for (let i = 0 ; i < pieces.length; i++) {
-            document.getElementById(`piece${i+1}`).style.backgroundColor = 'white';
-        }
-        pieceColours.set(-1, 'white');
-        pieceColours.set(0, 'grey');
+        document.body.classList.remove('dark-mode');
     }
-    drawBoard();
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[0].length; j++) {
-            cell = getLegionCell(i, j);
-            if (cell.style.borderTopColor != switchTo) {
-                cell.style.borderTopColor = switchTo
-            }
-            if (cell.style.borderBottomColor != switchTo) {
-                cell.style.borderBottomColor = switchTo
-            }
-            if (cell.style.borderRightColor != switchTo) {
-                cell.style.borderRightColor = switchTo
-            }
-            if (cell.style.borderLeftColor != switchTo) {
-                cell.style.borderLeftColor = switchTo
-            }
-        }
-    }
-    document.getElementById("body").style.color = switchTo;
+
+    colourBoard();
 }
 
 function activateBigClick() {
     isBigClick = !isBigClick;
     localStorage.setItem("isBigClick", JSON.stringify(isBigClick));
+    
+    // Save the complete state when user preferences change
+    saveCurrentState();
 }
 
 function activateLiveSolve() {
@@ -424,6 +622,9 @@ function activateLiveSolve() {
     if (isLiveSolve && state != states.COMPLETED) {
         drawBoard();
     }
+    
+    // Save the complete state when user preferences change
+    saveCurrentState();
 }
 
 function reset() {
@@ -436,6 +637,9 @@ function reset() {
     document.getElementById("failText").style.visibility = 'hidden';
     pieceHistory = [];
     state = states.START;
+    
+    // Save the complete state after reset
+    saveCurrentState();
 }
 
 async function handleButton(evt) {
@@ -478,6 +682,116 @@ async function runSolver() {
     if (boardFilled == 0 && currentPieces > 0) {
         return false;
     }
+    
+    // CRITICAL FIX: Make sure pieces array is updated from selected characters
+    console.log("Ensuring pieces array is updated before solving...");
+    
+    // Direct approach to update pieces from selected characters
+    const selectedPieces = document.querySelectorAll('.selectedPiece');
+    const pieceCountByIndex = {};
+    
+    // Detailed logging of each selected piece
+    console.log(`Found ${selectedPieces.length} selected pieces:`);
+    selectedPieces.forEach(piece => {
+        const characterName = piece.querySelector('.characterName')?.textContent || 'Unknown';
+        const characterLevel = piece.querySelector('.characterLevel')?.textContent || 'Unknown';
+        const characterClass = piece.getAttribute('data-character-class') || piece.dataset.characterClass || 'unknown';
+        const pieceIndex = parseInt(piece.getAttribute('data-piece-index') || piece.dataset.pieceIndex) || 0;
+        
+        console.log(`- ${characterName} (${characterClass} ${characterLevel}): Using piece index ${pieceIndex}`);
+        
+        pieceCountByIndex[pieceIndex] = (pieceCountByIndex[pieceIndex] || 0) + 1;
+    });
+    
+    // Reset all piece amounts first
+    pieces.forEach(piece => {
+        if (piece && typeof piece === 'object') {
+            piece.amount = 0;
+        }
+    });
+    
+    // Then update with our counts and show shape of each piece
+    console.log("Updating piece amounts and visualizing shapes:");
+    for (const [pieceIndex, count] of Object.entries(pieceCountByIndex)) {
+        const index = parseInt(pieceIndex) - 1; // pieceIndex is 1-based, array is 0-based
+        if (index >= 0 && index < pieces.length && pieces[index]) {
+            pieces[index].amount = count;
+            
+            // Visualize the shape for verification
+            console.log(`Piece #${pieceIndex} (amount: ${count}):`);
+            if (pieces[index].shape) {
+                // Convert shape to ASCII art for console viewing
+                const shapeLines = [];
+                pieces[index].shape.forEach(row => {
+                    let rowString = '  ';
+                    row.forEach(cell => {
+                        rowString += cell === 0 ? '□ ' : (cell === 1 ? '■ ' : '▣ ');
+                    });
+                    shapeLines.push(rowString);
+                });
+                console.log(shapeLines.join('\n'));
+                
+                // Also show point shape that solver actually uses
+                if (pieces[index].pointShape) {
+                    console.log(`  Point shape (${pieces[index].pointShape.length} points):`);
+                    const points = pieces[index].pointShape.map(p => 
+                        `    (${p.x},${p.y})${p.isMiddle ? ' [middle]' : ''}`
+                    ).join('\n');
+                    console.log(points);
+                }
+            } else {
+                console.warn(`  No shape defined for piece #${pieceIndex}`);
+            }
+        } else {
+            console.warn(`Piece index ${pieceIndex} (${index} in array) is out of range. Array length: ${pieces.length}`);
+        }
+    }
+    
+    // Call global update function if available
+    if (typeof window.updatePiecesForSolver === 'function') {
+        window.updatePiecesForSolver();
+    }
+    
+    // DEBUG: Print board and pieces information
+    console.log("========== SOLVER DEBUG ==========");
+    console.log("Board filled spaces:", boardFilled);
+    console.log("Current pieces total:", currentPieces);
+    
+    // Check if any pieces have amounts set
+    let hasPieces = false;
+    pieces.forEach((piece, index) => {
+        if (piece.amount > 0) {
+            console.log(`Piece ${index + 1} amount:`, piece.amount);
+            hasPieces = true;
+        }
+    });
+    
+    if (!hasPieces) {
+        console.error("No pieces were selected! Make sure pieces are being added correctly.");
+        alert("No pieces were selected! Please select at least one character piece.");
+        return false;
+    }
+    
+    // Check if board has any filled spaces
+    let hasFilledSpaces = false;
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[0].length; j++) {
+            if (board[i][j] === 0) { // 0 means filled space to solve
+                hasFilledSpaces = true;
+                break;
+            }
+        }
+        if (hasFilledSpaces) break;
+    }
+    
+    if (!hasFilledSpaces) {
+        console.error("No spaces were selected on the board! You need to fill in some spaces.");
+        alert("No spaces were filled on the board! Click on the grid to fill some spaces.");
+        return false;
+    }
+    
+    console.log("==================================");
+    
     let downBoard = [];
     for (let i = 0; i < board.length; i++) {
         downBoard[i] = [];
@@ -597,5 +911,23 @@ function onBoardUpdated() {
         drawBoard();
     }
 }
+
+// Initialize dark mode from localStorage
+function initDarkMode() {
+    const savedDarkMode = localStorage.getItem("isDarkMode");
+    if (savedDarkMode) {
+        const isDarkMode = JSON.parse(savedDarkMode);
+        document.getElementById("darkMode").checked = isDarkMode;
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+        }
+    }
+    colourBoard();
+}
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+    initDarkMode();
+});
 
 export { pieceColours };
