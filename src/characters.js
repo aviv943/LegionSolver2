@@ -102,7 +102,7 @@ const charactersData = [
         class: 'warrior',
         mainStat: 'HP',
         level: 250,
-        legionEffect: 'Boss Damage +%',
+        legionEffect: 'Boss DMG +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
         description: 'A demon who sacrificed everything for revenge',
         icon: '🔥'
@@ -214,7 +214,7 @@ const charactersData = [
         class: 'mage',
         mainStat: 'INT',
         level: 250,
-        legionEffect: 'Boss Damage +%',
+        legionEffect: 'Boss DMG +%',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         description: 'A Japanese spiritual Mage who uses fan weapons',
         icon: '🌸'
@@ -418,7 +418,7 @@ const charactersData = [
         class: 'pirate',
         mainStat: 'STR',
         level: 250,
-        legionEffect: 'Critical Damage +%',
+        legionEffect: 'Crit DMG +%',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         description: 'A forgotten hero who uses spirit fox powers',
         icon: '👻'
@@ -876,23 +876,25 @@ function renderCharactersToElement(container) {
     
     // Define standardized icons for legion effects
     const legionEffectIcons = {
-        'STR +%': '💪',
-        'DEX +%': '🎯',
-        'INT +%': '🧠',
-        'LUK +%': '🍀',
+        'STR +': '💪',
+        'DEX +': '🎯',
+        'INT +': '🧠',
+        'LUK +': '🍀',
         'Max HP +%': '❤️',
+        'Max HP +': '❤️',
         'Max MP +%': '💙',
-        'Ignore Defense +%': '🛡️',
-        'Boss Damage +%': '👑',
-        'Critical Rate +%': '🎯',
-        'Critical Damage +%': '💥',
+        'Max MP +': '💙',
+        'IED +%': '🛡️',
+        'Boss DMG +%': '👑',
+        'Crit Rate +%': '🎯',
+        'Crit DMG +%': '💥',
         'Buff Duration +%': '⏱️',
-        'Skill Cooldown -% Reduction': '⚡',
+        'Skill Cooldown -%': '⚡',
         'Summon Duration +%': '🧚',
         'Damage to Normal Monsters +%': '👹',
         'Meso Obtained +%': '💰',
-        'Experience Obtained +%': '📊',
-        'Stat +%': '📈'
+        'EXP +%': '📊',
+        'STR,DEX,LUK +%': '📈'
     };
     
     // Group characters by class
