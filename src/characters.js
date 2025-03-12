@@ -23,110 +23,90 @@ const charactersData = [
         id: 1,
         name: 'Hero',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A Warrior class that specializes in critical damage',
         icon: '⚔️'
     },
     {
         id: 2,
         name: 'Paladin',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A Warrior class with holy elemental attacks and party shields',
         icon: '🛡️'
     },
     {
         id: 3,
         name: 'Dark Knight',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'Max HP +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A Warrior class that sacrifices HP for powerful attacks',
         icon: '🔱'
     },
     {
         id: 4,
         name: 'Dawn Warrior',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'Max HP +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A Warrior of light combining solar and lunar forces',
         icon: '☀️'
     },
     {
         id: 5,
         name: 'Mihile',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'Max HP +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A royal guardian who uses a Soul Shield for defense',
         icon: '🔆'
     },
     {
         id: 6,
         name: 'Blaster',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'IED +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A Resistance fighter who uses arm cannons',
         icon: '💥'
     },
     {
         id: 7,
         name: 'Demon Slayer',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'Status Resistance +',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A former commander of the Black Mage who uses dark force',
         icon: '😈'
     },
     {
         id: 8,
         name: 'Demon Avenger',
         class: 'warrior',
-        mainStat: 'HP',
         level: 250,
         legionEffect: 'Boss DMG +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A demon who sacrificed everything for revenge',
         icon: '🔥'
     },
     {
         id: 9,
         name: 'Aran',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: '70% chance to heal MAXHP +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A Pole Arm-wielding hero of old with combo attacks',
         icon: '❄️'
     },
     {
         id: 44,
         name: 'Hayato',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'Critical Damage +%',
         pieceIndex: 9, // Refers to the piece type (lvl 250 Warrior)
-        description: 'A samurai warrior who uses swift katana techniques',
         icon: '⚔️'
     },
     
@@ -135,88 +115,72 @@ const charactersData = [
         id: 10,
         name: 'Arch Mage (Fire/Poison)',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'Max MP +%',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A Mage who specializes in fire and poison elemental magic',
         icon: '🔥'
     },
     {
         id: 11,
         name: 'Arch Mage (Ice/Lightning)',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A Mage who specializes in ice and lightning elemental magic',
         icon: '⚡'
     },
     {
         id: 12,
         name: 'Bishop',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A support Mage who uses holy magic to heal and buff allies',
         icon: '✝️'
     },
     {
         id: 13,
         name: 'Battle Mage',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A close-combat staff-wielding mage of the Resistance',
         icon: '🧙‍♂️'
     },
     {
         id: 14,
         name: 'Luminous',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A Mage of light and darkness who must maintain equilibrium',
         icon: '☯️'
     },
     {
         id: 15,
         name: 'Evan',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: '70% chance to heal MAXMP +%',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A dragon master who fights alongside Mir',
         icon: '🐉'
     },
     {
         id: 16,
         name: 'Illium',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A crystal-wielding Mage from Flora',
         icon: '💎'
     },
     {
         id: 17,
         name: 'Kanna',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'Boss DMG +%',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A Japanese spiritual Mage who uses fan weapons',
         icon: '🌸'
     },
 
@@ -225,66 +189,54 @@ const charactersData = [
         id: 18,
         name: 'Bowmaster',
         class: 'archer',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'DEX +',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
-        description: 'An Archer who fires multiple arrows with high speed',
         icon: '🏹'
     },
     {
         id: 19,
         name: 'Marksman',
         class: 'archer',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'Critical Rate +%',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
-        description: 'An Archer with high damage, single-target attacks',
         icon: '🎯'
     },
     {
         id: 20,
         name: 'Pathfinder',
         class: 'archer',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'DEX +',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
-        description: 'An ancient relic hunter who uses cursed magic',
         icon: '⚱️'
     },
     {
         id: 21,
         name: 'Wind Archer',
         class: 'archer',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'DEX +',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
-        description: 'An Archer who uses the power of wind',
         icon: '🍃'
     },
     {
         id: 22,
         name: 'Wild Hunter',
         class: 'archer',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'Damage to Normal Monsters +%',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
-        description: 'A crossbow-wielding Resistance member who rides a jaguar',
         icon: '🐆'
     },
     {
         id: 23,
         name: 'Mercedes',
         class: 'archer',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'Skill Cooldown -%',
         pieceIndex: 10, // Refers to the piece type (lvl 250 Archer)
-        description: 'An elven queen who dual-wields Bowguns with combo skills',
         icon: '🧝‍♀️'
     },
 
@@ -293,88 +245,72 @@ const charactersData = [
         id: 24,
         name: 'Night Lord',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'Critical Rate +%',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A Thief who throws stars from the shadows',
         icon: '🌑'
     },
     {
         id: 25,
         name: 'Shadower',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A melee Thief who uses daggers and meso attacks',
         icon: '🗡️'
     },
     {
         id: 26,
         name: 'Dual Blade',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A Thief who dual-wields katars with fast attacks',
         icon: '⚔️'
     },
     {
         id: 27,
         name: 'Night Walker',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A bat-controlling throwing star specialist',
         icon: '🦇'
     },
     {
         id: 28,
         name: 'Phantom',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'Meso Obtained +%',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A master thief who can steal skills from other classes',
         icon: '♠️'
     },
     {
         id: 29,
         name: 'Cadena',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A chain-wielding Nova who uses various weapons in combo',
         icon: '⛓️'
     },
     {
         id: 30,
         name: 'Hoyoung',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A trickster sage who uses illusions and talismans',
         icon: '🦊'
     },
     {
         id: 43,
         name: 'Khali',
         class: 'thief',
-        mainStat: 'LUK',
         level: 250,
         legionEffect: 'LUK +',
         pieceIndex: 11, // Refers to the piece type (lvl 250 Thief)
-        description: 'A nimble thief who specializes in swift shadow attacks',
         icon: '🥷'
     },
 
@@ -383,88 +319,72 @@ const charactersData = [
         id: 31,
         name: 'Buccaneer',
         class: 'pirate',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A pirate who uses knuckles with energy-charging abilities',
         icon: '👊'
     },
     {
         id: 32,
         name: 'Corsair',
         class: 'pirate',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'Summon Duration +%',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A gunslinging pirate who uses mechanical summons',
         icon: '🔫'
     },
     {
         id: 33,
         name: 'Cannoneer',
         class: 'pirate',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A pirate who rides and fires from a giant cannon',
         icon: '💣'
     },
     {
         id: 34,
         name: 'Shade',
         class: 'pirate',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'Crit DMG +%',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A forgotten hero who uses spirit fox powers',
         icon: '👻'
     },
     {
         id: 35,
         name: 'Angelic Buster',
         class: 'pirate',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'DEX +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A Nova girl who transforms into a magical girl',
         icon: '💕'
     },
     {
         id: 36,
         name: 'Thunder Breaker',
         class: 'pirate',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A lightning-wielding pirate with quick combo attacks',
         icon: '⚡'
     },
     {
         id: 37,
         name: 'Mechanic',
         class: 'pirate',
-        mainStat: 'DEX',
         level: 250,
         legionEffect: 'Buff Duration +%',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A Resistance member who pilots a mechanical suit',
         icon: '🤖'
     },
     {
         id: 38,
         name: 'Ark',
         class: 'pirate',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
-        description: 'A Specter from Flora who transforms between forms',
         icon: '🐙'
     },
 
@@ -473,66 +393,54 @@ const charactersData = [
         id: 39,
         name: 'Xenon',
         class: 'special',
-        mainStat: 'LUK/DEX/STR',
         level: 250,
         legionEffect: 'STR,DEX,LUK +',
         pieceIndex: 14, // Refers to the piece type (lvl 250 Xenon)
-        description: 'A hybrid android who uses all three stats',
         icon: '🤖'
     },
     {
         id: 40,
         name: 'Zero',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'EXP +%',
         pieceIndex: 9, // Zero uses Warrior pieces
-        description: 'Dual characters Alpha and Beta who share a body',
         icon: '⚔️'
     },
     {
         id: 41,
         name: 'Kinesis',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
         pieceIndex: 12, // Kinesis uses Mage pieces
-        description: 'A psychic from another world who uses telekinesis',
         icon: '🧠'
     },
     {
         id: 42,
         name: 'Adele',
         class: 'warrior',
-        mainStat: 'STR',
         level: 250,
         legionEffect: 'STR +',
         pieceIndex: 9, // Adele uses Warrior pieces
-        description: 'A master of Aether who uses floating swords',
         icon: '⚔️'
     },
     {
         id: 45,
         name: 'Lynn',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'IED +%',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A wizard who harnesses elemental powers through her staff',
         icon: '🪄'
     },
     {
         id: 46,
         name: 'Lara',
         class: 'mage',
-        mainStat: 'INT',
         level: 250,
         legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
-        description: 'A nature wizard who channels the power of the forest',
         icon: '🌿'
     }
 ];
@@ -1081,9 +989,7 @@ function selectCharacter(character) {
         <div class="characterDetailCard" data-class="${character.class}">
             <h4>${character.name}</h4>
             <p><strong>Class:</strong> ${character.class.charAt(0).toUpperCase() + character.class.slice(1)}</p>
-            <p><strong>Main Stat:</strong> ${character.mainStat}</p>
             <p><strong>Legion Effect:</strong> ${character.legionEffect}</p>
-            <p>${character.description}</p>
             
             <div class="level-selection">
                 <p><strong>Select Character Level:</strong></p>
