@@ -79,9 +79,9 @@ const defaultPieces = [
 
     // Lvl 250 Thief (index 11)
     [
-        [1, 0, 1],
+        [0, 0, 1],
         [1, 2, 1],
-        [1, 0, 1]
+        [0, 0, 1]
     ],
 
     // Lvl 250 Mage (index 12)
