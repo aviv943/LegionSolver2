@@ -289,15 +289,21 @@ function updateCurrentPieces() {
 
         localStorage.setItem(STORAGE_KEYS.PIECE_AMOUNTS, JSON.stringify(pieces.map(piece => piece.amount)));
         localStorage.setItem(STORAGE_KEYS.CURRENT_PIECES, JSON.stringify(currentPieces));
+        
+        // Save character count to localStorage for compatibility
+        localStorage.setItem('characterCount', JSON.stringify(currentUseCaracterCount));
 
         const currentPiecesValue = document.getElementById('currentPiecesValue');
         if (currentPiecesValue) {
             currentPiecesValue.innerText = `${currentPieces}`;
         }
         
+        // Check if the element exists before trying to update it
         const currentCaracterCountValue = document.getElementById("currentCaracterCountValue");
         if (currentCaracterCountValue) {
             currentCaracterCountValue.innerText = `${currentUseCaracterCount}`;
+        } else {
+            console.log("Note: currentCaracterCountValue element not found - this is expected if the element was removed");
         }
         
         // Restore boardFilled if we're not in the START state

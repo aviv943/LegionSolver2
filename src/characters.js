@@ -563,6 +563,9 @@ function initCharacterSelector() {
         // Update the active preset button UI
         updateActivePresetUI();
         
+        // Initialize the character count
+        updateSelectedCharactersCount();
+        
         // Load saved state for the active preset
         setTimeout(() => {
             loadSavedState();
@@ -980,7 +983,7 @@ function selectCharacter(character) {
         return `
             <label class="level-option">
                 <input type="radio" name="characterLevel" value="${level}" data-piece-index="${pieceIndex}" ${checked}>
-                <span>Level ${level}</span>
+                <span>${level}</span>
             </label>
         `;
     }).join('');
@@ -1022,6 +1025,15 @@ function selectCharacter(character) {
             
             addCharacterToPieceSelection(modifiedCharacter);
         };
+    }
+}
+
+// Function to update the selected characters count in the header
+function updateSelectedCharactersCount() {
+    const selectedPieces = document.querySelectorAll('.selectedPiece');
+    const countElement = document.getElementById('selectedCharactersCount');
+    if (countElement) {
+        countElement.textContent = `(${selectedPieces.length})`;
     }
 }
 
@@ -1112,6 +1124,9 @@ function addCharacterToPieceSelection(character) {
             updatePieceAmounts();
             toggleCharacterSelection(character.id, false);
             
+            // Update the character count
+            updateSelectedCharactersCount();
+            
             // Save state after removing character
             saveCurrentState();
         };
@@ -1129,6 +1144,9 @@ function addCharacterToPieceSelection(character) {
     
     // Highlight selected character
     toggleCharacterSelection(character.id, true);
+    
+    // Update the character count
+    updateSelectedCharactersCount();
     
     // Save the current selection state
     saveCurrentState();
@@ -1293,6 +1311,9 @@ function clearPieceSelection() {
     // Update the piece amounts in the solver
     updatePieceAmounts();
     
+    // Update the character count
+    updateSelectedCharactersCount();
+    
     // Save the cleared state
     saveCurrentState();
 }
@@ -1370,6 +1391,9 @@ function loadSavedState() {
                 
                 // Update piece amounts once after adding all characters
                 updatePieceAmounts();
+                
+                // Update the character count after loading all characters
+                updateSelectedCharactersCount();
             } else {
                 console.log('No saved characters found for this preset');
                 // Reset piece amounts since we have no characters
@@ -1401,6 +1425,9 @@ function clearCharacterSelectionUI() {
     document.querySelectorAll('.characterCard.selected').forEach(card => {
         card.classList.remove('selected');
     });
+    
+    // Update the character count
+    updateSelectedCharactersCount();
 }
 
 // Add character without saving state (to avoid recursion during loading)
@@ -1473,6 +1500,9 @@ function addCharacterWithoutSaving(character) {
             updatePieceAmounts();
             toggleCharacterSelection(character.id, false);
             
+            // Update the character count
+            updateSelectedCharactersCount();
+            
             // Save state after removing character
             saveCurrentState();
         };
@@ -1483,6 +1513,9 @@ function addCharacterWithoutSaving(character) {
     
     // Highlight selected character
     toggleCharacterSelection(character.id, true);
+    
+    // Update the character count
+    updateSelectedCharactersCount();
 }
 
 // Debug utility for the UI - expose this to window
@@ -1669,14 +1702,18 @@ function resetPieceAmounts() {
         currentPiecesValue.innerText = '0';
     }
     
+    // Safely check if the element exists before updating it
     const currentCaracterCountValue = document.getElementById('currentCaracterCountValue');
     if (currentCaracterCountValue) {
         currentCaracterCountValue.innerText = '0';
+    } else {
+        console.log("Note: currentCaracterCountValue element not found - this is expected if the element was removed");
     }
     
     // Save zeroed state to localStorage (without triggering recursion)
     localStorage.setItem(STORAGE_KEYS.PIECE_AMOUNTS, JSON.stringify(Array(18).fill(0)));
     localStorage.setItem(STORAGE_KEYS.CURRENT_PIECES, JSON.stringify(0));
+    localStorage.setItem('characterCount', JSON.stringify(0)); // For compatibility
     
     // Use global update only if we need to update the UI in other components
     // This is wrapped in a setTimeout to avoid any recursion issues
