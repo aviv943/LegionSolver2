@@ -442,6 +442,28 @@ const charactersData = [
         legionEffect: 'INT +',
         pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
         icon: '🌿'
+    },
+
+    // Lab Characters
+    {
+        id: 47,
+        name: 'Lab',
+        class: 'special',
+        level: 250,
+        legionEffect: 'W.ATT & M.ATT +',
+        pieceIndex: 17, // Refers to the piece type (lvl 250 Lab)
+        icon: '🧪',
+        isLab: true // Flag to identify Lab character
+    },
+    {
+        id: 48,
+        name: 'Enhanced Lab',
+        class: 'special',
+        level: 250, // Default to max level
+        legionEffect: 'W.ATT & M.ATT +',
+        pieceIndex: 16, // Default to lvl 250 Enhanced Lab piece
+        icon: '⚗️',
+        isEnhancedLab: true // Flag to identify Enhanced Lab character
     }
 ];
 
@@ -774,7 +796,7 @@ function renderCharactersToElement(container) {
     const legionEffectIcons = {
         'STR +': '💪',
         'DEX +': '🎯',
-        'INT +': '🧠',
+        'INT +': '��',
         'LUK +': '🍀',
         'Max HP +%': '❤️',
         'Max HP +': '❤️',
@@ -965,12 +987,33 @@ function selectCharacter(character) {
     window.levelToPieceIndex = levelToPieceIndex;
     
     // Create level selection radio buttons
-    const levelControls = [60, 100, 140, 200, 250].map(level => {
-        const pieceId = levelToPieceIndex[character.class][level] || 1;
+    const levelControls = [60, 100, 140, 200, 250].filter(level => {
+        // For regular Lab, only show levels 200 and 250
+        if (character.isLab) {
+            return level === 200 || level === 250;
+        }
+        // For Enhanced Lab, only show levels 200 and 250
+        if (character.isEnhancedLab) {
+            return level === 200 || level === 250;
+        }
+        // For all other characters, show all levels
+        return true;
+    }).map(level => {
+        let pieceId;
+        if (character.isEnhancedLab) {
+            // Enhanced Lab uses piece 15 for level 200 and piece 16 for level 250
+            pieceId = level === 200 ? 15 : 16;
+        } else if (character.isLab) {
+            // Lab uses piece 7 for level 200 and piece 17 for level 250
+            pieceId = level === 200 ? 7 : 17;
+        } else {
+            // Normal characters use the standard mapping
+            pieceId = levelToPieceIndex[character.class][level] || 1;
+        }
         
         return `
             <label class="level-radio">
-                <input type="radio" name="level" value="${level}" data-piece-index="${pieceId}" ${level === 250 ? 'checked' : ''}>
+                <input type="radio" name="level" value="${level}" data-piece-index="${pieceId}" ${level === character.level ? 'checked' : ''}>
                 <span>Lvl ${level}</span>
             </label>
         `;
