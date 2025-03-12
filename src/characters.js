@@ -512,6 +512,28 @@ const charactersData = [
         pieceIndex: 9, // Adele uses Warrior pieces
         description: 'A master of Aether who uses floating swords',
         icon: '⚔️'
+    },
+    {
+        id: 45,
+        name: 'Lynn',
+        class: 'mage',
+        mainStat: 'INT',
+        level: 250,
+        legionEffect: 'IED +%',
+        pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
+        description: 'A wizard who harnesses elemental powers through her staff',
+        icon: '🪄'
+    },
+    {
+        id: 46,
+        name: 'Lara',
+        class: 'mage',
+        mainStat: 'INT',
+        level: 250,
+        legionEffect: 'INT +',
+        pieceIndex: 12, // Refers to the piece type (lvl 250 Mage)
+        description: 'A nature wizard who channels the power of the forest',
+        icon: '🌿'
     }
 ];
 
