@@ -794,10 +794,10 @@ function renderCharactersToElement(container) {
     
     // Define standardized icons for legion effects
     const legionEffectIcons = {
-        'STR +': '💪',
-        'DEX +': '🎯',
-        'INT +': '��',
-        'LUK +': '🍀',
+        'STR +': '🟤',
+        'DEX +': '🟢',
+        'INT +': '🔵',
+        'LUK +': '🟣',
         'Max HP +%': '❤️',
         'Max HP +': '❤️',
         'Max MP +%': '💙',
