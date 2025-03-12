@@ -79,10 +79,6 @@ Contributions are welcome! If you'd like to contribute to the project, please:
 ## Credits
 - Original Legion Solver by Xenogent of Bera
 - Legion Solver v2 upgrade by Aviv943
-- Special thanks to all contributors and the MapleStory community
-
-## License
-This project is licensed under the ISC License - see the LICENSE file for details.
 
 ## Contact
 If you have questions or feedback, please open an issue on the GitHub repository.
