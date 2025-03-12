@@ -1291,14 +1291,14 @@ function updatePieceAmounts() {
         // Count selected pieces by type
         const pieceCountByIndex = {};
         let characterCount = 0;
-        let totalPieces = 0;
+        let totalSpaces = 0;
         
         document.querySelectorAll('.selectedPiece').forEach(piece => {
             const pieceIndex = parseInt(piece.dataset.pieceIndex);
             pieceCountByIndex[pieceIndex] = (pieceCountByIndex[pieceIndex] || 0) + 1;
             characterCount++;
             
-            // Calculate total pieces (cells) based on character level
+            // Calculate total spaces based on character level
             const level = parseInt(piece.dataset.level) || 250;
             let cellCount = 1; // Default
             
@@ -1308,12 +1308,12 @@ function updatePieceAmounts() {
             else if (level === 200) cellCount = 4;
             else if (level === 250) cellCount = 5;
             
-            totalPieces += cellCount;
+            totalSpaces += cellCount;
         });
         
         console.log('Piece counts by index:', pieceCountByIndex);
         console.log('Total characters:', characterCount);
-        console.log('Total pieces (cells):', totalPieces);
+        console.log('Total spaces:', totalSpaces);
         
         // Update piece inputs
         for (const [pieceIndex, count] of Object.entries(pieceCountByIndex)) {
@@ -1324,6 +1324,22 @@ function updatePieceAmounts() {
             } else {
                 console.warn(`Piece input element for piece${pieceIndex} not found`);
             }
+        }
+        
+        // Update the Spaces to be Filled display
+        const currentPiecesValue = document.getElementById('currentPiecesValue');
+        if (currentPiecesValue) {
+            currentPiecesValue.innerText = totalSpaces.toString();
+            // Also store in localStorage for persistence
+            localStorage.setItem(STORAGE_KEYS.CURRENT_PIECES, JSON.stringify(totalSpaces));
+        }
+        
+        // Update character count display
+        const currentCaracterCountValue = document.getElementById('currentCaracterCountValue');
+        if (currentCaracterCountValue) {
+            currentCaracterCountValue.innerText = characterCount.toString();
+            // Store in localStorage for persistence
+            localStorage.setItem('characterCount', JSON.stringify(characterCount));
         }
         
         // CRITICAL FIX: Restore the boardFilled value if the solver has already started
