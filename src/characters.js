@@ -387,6 +387,15 @@ const charactersData = [
         pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
         icon: '🐙'
     },
+    {
+        id: 49,
+        name: 'Mu Xuan',
+        class: 'pirate',
+        level: 250,
+        legionEffect: 'Crit DMG +%',
+        pieceIndex: 13, // Refers to the piece type (lvl 250 Pirate)
+        icon: '🏴‍☠️'
+    },
 
     // Special Classes
     {
